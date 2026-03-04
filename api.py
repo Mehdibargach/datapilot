@@ -83,8 +83,13 @@ async def run_analysis(
     }
 
     if include_insights:
-        response["insights"] = result.get("insights", "")
-        response["insights_list"] = result.get("insights_list", [])
+        insights_list = result.get("insights_list", [])
+        if not insights_list:
+            # Fallback: split raw insights string into lines
+            raw = result.get("insights", "")
+            if raw:
+                insights_list = [line.strip() for line in raw.split(". ") if line.strip()]
+        response["insights"] = insights_list
         response["insights_chart"] = _encode_chart(result.get("insights_chart"))
 
     # Clean up chart files
