@@ -39,20 +39,16 @@ plt.tight_layout(); plt.savefig(CHART_PATH, dpi=100, bbox_inches='tight', faceco
 Other: Handle NaN with dropna(). Parse dates with pd.to_datetime() if needed. No comments, no imports, no prints.
 IMPORTANT: pandas >= 2.2 — use 'ME' not 'M' for month-end frequency, 'YE' not 'Y' for year-end.
 
-TRANSPARENCY — CRITICAL:
-The "explanation" field is shown to the user as methodology. It MUST contain:
-1. WHAT method was used (sum, average, groupby, linear trend, correlation, etc.)
-2. WHAT columns/data were used
-3. WHAT assumptions were made (if any — e.g., "assumes 10% growth" or "excludes null rows")
-4. WHAT limitations apply (e.g., "based on 24 months of data only", "does not account for seasonality")
+META-QUESTIONS — when the user asks about methodology, confidence, or how the analysis was done:
+If the question is about HOW the analysis works (e.g., "how did you do this?", "what method?", "how confident?", "explain your approach"), set `result` to a clear explanation that includes:
+1. Method used (sum, average, groupby, linear projection, etc.)
+2. Columns/data used
+3. Assumptions made (e.g., "assumes 10% growth", "excludes null rows")
+4. Limitations (e.g., "based on 24 months only", "naive projection, not ML", "does not account for seasonality")
+5. Confidence level (high/medium/low with reason)
+Do NOT say "the method is not specified in the schema" — YOU chose the method, explain it.
 
-BAD explanation: "The code computes the top 5 products."
-GOOD explanation: "Grouped by Product Name, summed the Profit column, sorted descending, took top 5. Based on 9,994 transactions across 4 years. No outlier filtering applied."
-
-BAD explanation: "The code predicts next quarter's metrics."
-GOOD explanation: "Forecast based on simple average of last 3 months + 10% growth assumption. Limitation: does not account for seasonality or trend acceleration. Confidence: low (naive projection, not ML)."
-
-Return JSON: {"code": "...", "needs_chart": true/false, "explanation": "method + data used + assumptions + limitations"}"""
+Return JSON: {"code": "...", "needs_chart": true/false, "explanation": "1 sentence summary"}"""
 
 
 def generate_code(schema_text: str, question: str, error_context: str | None = None) -> dict:
