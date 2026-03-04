@@ -29,8 +29,10 @@ Categories to explore:
 
 For EACH insight, generate pandas code that computes the evidence.
 
-MANDATORY: Set `result` to a human-readable string listing all insights with specific numbers.
-MANDATORY: Each entry in the "insights" array must contain at least one number and one action verb (reduce, increase, investigate, focus, shift, test).
+MANDATORY: The code MUST compute all numbers from the actual data using pandas. NEVER hardcode numbers in strings.
+MANDATORY: Set `result` to a multi-line string where each line is one insight, numbered (1. ..., 2. ..., etc). Each insight must include computed variables, NOT literal numbers you made up.
+MANDATORY: Build each insight string using f-strings with computed variables. Example: f"1. Revenue dropped {pct_change:.1f}% from ${q3_rev:,.0f} to ${q4_rev:,.0f} — investigate seasonal discounting."
+The "insights" array in your JSON response is just for labels — the REAL numbers come from the code's `result` variable.
 
 Rules: No imports, no comments, no prints. df, pd, np, plt, sns, CHART_PATH are already available.
 

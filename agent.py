@@ -103,11 +103,19 @@ def analyze_with_insights(csv_path: str, question: str, chart_path: str = "chart
     t_insights_exec = time.time() - start
 
     insights_text = ""
+    insights_from_code = []
     if insight_exec["success"]:
         insights_text = insight_exec["result"]
+        raw = insights_text.strip()
+        for line in raw.split("\n"):
+            line = line.strip()
+            if line and len(line) > 10:
+                clean = line.lstrip("0123456789.-) ").strip()
+                if clean:
+                    insights_from_code.append(clean)
 
-    # Step 4: Recommendations (generated from insights)
-    recommendations = insight_result.get("insights", [])
+    # Use code-computed insights (accurate), fallback to LLM-generated
+    recommendations = insights_from_code if insights_from_code else insight_result.get("insights", [])
 
     t_total = time.time() - start
 
