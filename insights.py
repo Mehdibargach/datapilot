@@ -32,12 +32,10 @@ For EACH insight, generate pandas code that computes the evidence.
 MANDATORY: The code MUST compute all numbers from the actual data using pandas. NEVER hardcode numbers in strings.
 MANDATORY: Set `result` to a multi-line string where each line is one insight, numbered (1. ..., 2. ..., etc). Each insight must include computed variables, NOT literal numbers you made up.
 MANDATORY: Build each insight string using f-strings with computed variables. Example: f"1. Revenue dropped {pct_change:.1f}% from ${q3_rev:,.0f} to ${q4_rev:,.0f} — investigate seasonal discounting."
-The "insights" array in your JSON response is just for labels — the REAL numbers come from the code's `result` variable.
-
 Rules: No imports, no comments, no prints. df, pd, np, plt, sns, CHART_PATH are already available.
 
 Return JSON:
-{"code": "pandas code that computes all insights and sets result", "insights": ["insight 1 with numbers + action", "insight 2 with numbers + action", ...], "explanation": "brief overview"}"""
+{"code": "pandas code that computes all insights and sets result", "explanation": "brief overview"}"""
 
 
 def discover_insights(schema: dict, df_summary: str) -> dict:
