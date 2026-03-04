@@ -53,6 +53,13 @@ def execute_code(code: str, df: pd.DataFrame, chart_path: str = "chart.png") -> 
     # Get result
     result = namespace.get("result")
 
+    # Safety net: if result is None, try to find something useful
+    if result is None:
+        if stdout_output and stdout_output.strip():
+            result = stdout_output.strip()
+        else:
+            result = "Analysis complete (see chart)." if os.path.exists(chart_path) else "No result produced."
+
     # Format result for display
     if isinstance(result, pd.DataFrame):
         result_str = result.to_string()
