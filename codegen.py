@@ -12,7 +12,20 @@ MANDATORY:
 - Answer ALL parts of the question. If the user asks two things, answer both.
 
 Chart rules (only if useful):
-sns.set_style('whitegrid'); plt.figure(figsize=(10,6)); add title+labels; plt.tight_layout(); plt.savefig(CHART_PATH, dpi=100, bbox_inches='tight')
+DARK THEME MANDATORY — use this exact setup:
+plt.style.use('dark_background')
+fig, ax = plt.subplots(figsize=(10, 6))
+fig.patch.set_facecolor('#0A0A0A')
+ax.set_facecolor('#0A0A0A')
+ax.tick_params(colors='#94A3B8', labelsize=9)
+ax.xaxis.label.set_color('#94A3B8')
+ax.yaxis.label.set_color('#94A3B8')
+ax.title.set_color('#FFFFFF')
+for spine in ax.spines.values(): spine.set_color('#1C1C1C')
+ax.grid(True, alpha=0.1, color='#FFFFFF')
+Use color palette: ['#818CF8', '#34D399', '#F59E0B', '#F87171', '#A78BFA', '#38BDF8']
+For date axes: plt.xticks(rotation=45, ha='right') and use ax.xaxis.set_major_locator(plt.MaxNLocator(12)) to limit label count.
+plt.tight_layout(); plt.savefig(CHART_PATH, dpi=100, bbox_inches='tight', facecolor='#0A0A0A')
 
 Other: Handle NaN with dropna(). Parse dates with pd.to_datetime() if needed. No comments, no imports, no prints.
 IMPORTANT: pandas >= 2.2 — use 'ME' not 'M' for month-end frequency, 'YE' not 'Y' for year-end.
