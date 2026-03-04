@@ -1,6 +1,7 @@
 """FastAPI backend — POST /analyze endpoint."""
 
 import base64
+import json
 import os
 import tempfile
 import uuid
@@ -40,8 +41,15 @@ async def run_analysis(
     dataset: str = Form(None),
     file: UploadFile = File(None),
     include_insights: bool = Form(False),
+    history: str = Form("[]"),
 ):
     """Analyze a CSV with a natural language question."""
+    # Parse conversation history
+    try:
+        history_list = json.loads(history) if history else []
+    except json.JSONDecodeError:
+        history_list = []
+
     # Resolve CSV path
     if dataset and dataset in DEMO_DATASETS:
         base = os.path.dirname(os.path.abspath(__file__))
@@ -61,9 +69,9 @@ async def run_analysis(
 
     try:
         if include_insights:
-            result = analyze_with_insights(csv_path, question, chart_path=chart_path)
+            result = analyze_with_insights(csv_path, question, chart_path=chart_path, history=history_list)
         else:
-            result = analyze(csv_path, question, chart_path=chart_path)
+            result = analyze(csv_path, question, chart_path=chart_path, history=history_list)
     finally:
         # Clean up uploaded temp file
         if file and os.path.exists(csv_path):

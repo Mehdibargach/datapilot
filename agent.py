@@ -16,13 +16,13 @@ DEMO_DATASETS = {
 }
 
 
-def _run_with_retry(schema_text, question, df, chart_path, error_context=None):
+def _run_with_retry(schema_text, question, df, chart_path, error_context=None, history=None):
     """Generate code and execute, with 1 retry on error."""
     max_attempts = 2
     last_error = error_context
 
     for attempt in range(max_attempts):
-        codegen_result = generate_code(schema_text, question, error_context=last_error)
+        codegen_result = generate_code(schema_text, question, error_context=last_error, history=history)
         code = codegen_result["code"]
         exec_result = execute_code(code, df, chart_path=chart_path)
 
@@ -34,7 +34,7 @@ def _run_with_retry(schema_text, question, df, chart_path, error_context=None):
     return codegen_result, exec_result
 
 
-def analyze(csv_path: str, question: str, chart_path: str = "chart.png") -> dict:
+def analyze(csv_path: str, question: str, chart_path: str = "chart.png", history: list | None = None) -> dict:
     """Prompt Chaining pipeline: schema → codegen → execute → answer."""
     start = time.time()
 
@@ -44,7 +44,7 @@ def analyze(csv_path: str, question: str, chart_path: str = "chart.png") -> dict
     t_schema = time.time() - start
 
     # Step 2 + 3: Code generation → execution (with retry)
-    codegen_result, exec_result = _run_with_retry(schema_text, question, df, chart_path)
+    codegen_result, exec_result = _run_with_retry(schema_text, question, df, chart_path, history=history)
     t_exec = time.time() - start
 
     if not exec_result["success"]:
@@ -71,7 +71,7 @@ def analyze(csv_path: str, question: str, chart_path: str = "chart.png") -> dict
     }
 
 
-def analyze_with_insights(csv_path: str, question: str, chart_path: str = "chart.png") -> dict:
+def analyze_with_insights(csv_path: str, question: str, chart_path: str = "chart.png", history: list | None = None) -> dict:
     """Full pipeline: answer + proactive insights + recommendations."""
     start = time.time()
 
@@ -80,7 +80,7 @@ def analyze_with_insights(csv_path: str, question: str, chart_path: str = "chart
     schema_text = schema_to_text(schema)
 
     # Step 2: Answer the question
-    codegen_result, exec_result = _run_with_retry(schema_text, question, df, chart_path)
+    codegen_result, exec_result = _run_with_retry(schema_text, question, df, chart_path, history=history)
     t_answer = time.time() - start
 
     if not exec_result["success"]:

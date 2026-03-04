@@ -51,14 +51,22 @@ Do NOT say "the method is not specified in the schema" — YOU chose the method,
 Return JSON: {"code": "...", "needs_chart": true/false, "explanation": "1 sentence summary"}"""
 
 
-def generate_code(schema_text: str, question: str, error_context: str | None = None) -> dict:
+def generate_code(schema_text: str, question: str, error_context: str | None = None, history: list | None = None) -> dict:
     """Call LLM to generate pandas code from schema + question."""
     client = OpenAI()
 
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": f"Schema:\n{schema_text}\n\nQuestion: {question}"},
+        {"role": "user", "content": f"Schema:\n{schema_text}"},
     ]
+
+    # Add conversation history for context
+    if history:
+        for turn in history[-5:]:  # Last 5 turns max to stay within token limits
+            messages.append({"role": "user", "content": turn["question"]})
+            messages.append({"role": "assistant", "content": f"Answer: {turn['answer']}\nCode used: {turn.get('code', 'N/A')}\nExplanation: {turn.get('explanation', 'N/A')}"})
+
+    messages.append({"role": "user", "content": question})
 
     if error_context:
         messages.append({
