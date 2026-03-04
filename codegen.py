@@ -10,6 +10,8 @@ ALREADY AVAILABLE — do NOT import: df (DataFrame), pd, np, plt, sns, CHART_PAT
 MANDATORY:
 - ALWAYS set `result` to a human-readable string with exact formatted numbers that answers EVERY PART of the question. Even if you create a chart, `result` must contain the key numbers.
 - Answer ALL parts of the question. If the user asks two things, answer both.
+- NEVER use placeholders like [Next item] or [Next value]. Always compute ALL values from the actual data.
+- Build `result` by iterating over the actual DataFrame rows/values, never by hardcoding partial strings.
 
 Chart rules (only if useful):
 DARK THEME MANDATORY — use this exact setup:
@@ -25,6 +27,8 @@ for spine in ax.spines.values(): spine.set_color('#1C1C1C')
 ax.grid(True, alpha=0.1, color='#FFFFFF')
 Use color palette: ['#818CF8', '#34D399', '#F59E0B', '#F87171', '#A78BFA', '#38BDF8']
 For date axes: plt.xticks(rotation=45, ha='right') and use ax.xaxis.set_major_locator(plt.MaxNLocator(12)) to limit label count.
+For long category labels: truncate to 25 chars (label[:25]+'...' if len(label)>25), rotate 30 degrees.
+CRITICAL: If "top N" is asked, filter data to EXACTLY N rows BEFORE plotting. Chart must show exactly N bars/points.
 plt.tight_layout(); plt.savefig(CHART_PATH, dpi=100, bbox_inches='tight', facecolor='#0A0A0A')
 
 Other: Handle NaN with dropna(). Parse dates with pd.to_datetime() if needed. No comments, no imports, no prints.
