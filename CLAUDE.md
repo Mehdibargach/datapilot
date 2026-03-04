@@ -1,4 +1,4 @@
-# InsightPilot
+# DataPilot
 
 ## What this project is
 AI agent that analyzes CSV data. Drop a CSV, ask a question in plain language, get charts + insights + actions in 10 seconds. Your data analyst on demand — no code, no Excel, no waiting.

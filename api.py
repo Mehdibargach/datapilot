@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from agent import analyze, analyze_with_insights, list_datasets, DEMO_DATASETS
 
-app = FastAPI(title="InsightPilot", version="0.1.0")
+app = FastAPI(title="DataPilot", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,

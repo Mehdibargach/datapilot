@@ -4,7 +4,7 @@
 
 ---
 
-**Project Name:** InsightPilot
+**Project Name:** DataPilot
 **One-liner:** Depose un CSV, pose une question en francais, recois charts + insights + actions en 10 secondes.
 **Date:** 2026-03-04
 **Builder PM Method Phase:** AI Agent (multi-step) — side project #3/5 dans le portfolio Builder PM.

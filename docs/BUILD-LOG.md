@@ -1,4 +1,4 @@
-# BUILD LOG — InsightPilot
+# BUILD LOG — DataPilot
 
 ## Walking Skeleton — "L'agent repond a une question"
 

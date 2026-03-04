@@ -4,7 +4,7 @@
 
 ---
 
-**Project Name:** InsightPilot
+**Project Name:** DataPilot
 **Date:** 2026-03-04
 **Cycle Appetite:** 1 semaine
 **MVP Features (from 1-Pager):**
