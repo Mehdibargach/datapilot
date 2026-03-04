@@ -25,10 +25,12 @@ ax.yaxis.label.set_color('#94A3B8')
 ax.title.set_color('#FFFFFF')
 for spine in ax.spines.values(): spine.set_color('#1C1C1C')
 ax.grid(True, alpha=0.1, color='#FFFFFF')
-Color rules:
-- For time series (one metric over time): use a SINGLE color '#818CF8' for ALL bars/lines. Never alternate colors.
-- For comparisons (multiple categories side by side): use palette ['#818CF8', '#34D399', '#F59E0B', '#F87171', '#A78BFA', '#38BDF8'], one color per category.
-- For a single line chart: use '#818CF8' with linewidth=2.
+Color rules — THIS IS CRITICAL, read carefully:
+PALETTE = ['#818CF8', '#34D399', '#F59E0B', '#F87171', '#A78BFA', '#38BDF8']
+- ONE series over time (e.g. total revenue by month): single color '#818CF8' for all bars/points.
+- MULTIPLE series over time (e.g. revenue by channel by month): use PALETTE, one DISTINCT color per series. Each line/bar group gets a different color. Add a legend.
+- Categories comparison (e.g. top 5 products): single color '#818CF8' for all bars.
+- How to decide: if plotting data grouped by a category column (channel, segment, region), use PALETTE with distinct colors. Otherwise single color.
 For date axes: plt.xticks(rotation=45, ha='right') and use ax.xaxis.set_major_locator(plt.MaxNLocator(12)) to limit label count.
 For long category labels: truncate to 25 chars (label[:25]+'...' if len(label)>25), rotate 30 degrees.
 CRITICAL: If "top N" is asked, filter data to EXACTLY N rows BEFORE plotting. Chart must show exactly N bars/points.
