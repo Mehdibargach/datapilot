@@ -25,7 +25,10 @@ ax.yaxis.label.set_color('#94A3B8')
 ax.title.set_color('#FFFFFF')
 for spine in ax.spines.values(): spine.set_color('#1C1C1C')
 ax.grid(True, alpha=0.1, color='#FFFFFF')
-Use color palette: ['#818CF8', '#34D399', '#F59E0B', '#F87171', '#A78BFA', '#38BDF8']
+Color rules:
+- For time series (one metric over time): use a SINGLE color '#818CF8' for ALL bars/lines. Never alternate colors.
+- For comparisons (multiple categories side by side): use palette ['#818CF8', '#34D399', '#F59E0B', '#F87171', '#A78BFA', '#38BDF8'], one color per category.
+- For a single line chart: use '#818CF8' with linewidth=2.
 For date axes: plt.xticks(rotation=45, ha='right') and use ax.xaxis.set_major_locator(plt.MaxNLocator(12)) to limit label count.
 For long category labels: truncate to 25 chars (label[:25]+'...' if len(label)>25), rotate 30 degrees.
 CRITICAL: If "top N" is asked, filter data to EXACTLY N rows BEFORE plotting. Chart must show exactly N bars/points.
