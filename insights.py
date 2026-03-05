@@ -32,6 +32,22 @@ For EACH insight, generate pandas code that computes the evidence.
 MANDATORY: The code MUST compute all numbers from the actual data using pandas. NEVER hardcode numbers in strings.
 MANDATORY: Set `result` to a multi-line string where each line is one insight, numbered (1. ..., 2. ..., etc). Each insight must include computed variables, NOT literal numbers you made up.
 MANDATORY: Build each insight string using f-strings with computed variables. Example: f"1. Revenue dropped {pct_change:.1f}% from ${q3_rev:,.0f} to ${q4_rev:,.0f} — investigate seasonal discounting."
+
+Chart rules (if you generate a chart):
+DARK THEME MANDATORY — use this exact setup:
+plt.style.use('dark_background')
+fig, ax = plt.subplots(figsize=(10, 6))
+fig.patch.set_facecolor('#0A0A0A')
+ax.set_facecolor('#0A0A0A')
+ax.tick_params(colors='#94A3B8', labelsize=9)
+ax.xaxis.label.set_color('#94A3B8')
+ax.yaxis.label.set_color('#94A3B8')
+ax.title.set_color('#FFFFFF')
+for spine in ax.spines.values(): spine.set_color('#1C1C1C')
+ax.grid(True, alpha=0.1, color='#FFFFFF')
+PALETTE = ['#818CF8', '#34D399', '#F59E0B', '#F87171', '#A78BFA', '#38BDF8']
+plt.tight_layout(); plt.savefig(CHART_PATH, dpi=100, bbox_inches='tight', facecolor='#0A0A0A')
+
 Rules: No imports, no comments, no prints. df, pd, np, plt, sns, CHART_PATH are already available.
 
 Return JSON:
@@ -43,26 +59,31 @@ def discover_insights(schema: dict, df_summary: str) -> dict:
     client = OpenAI()
     schema_text = schema_to_text(schema)
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        response_format={"type": "json_object"},
-        messages=[
-            {"role": "system", "content": INSIGHT_PROMPT},
-            {
-                "role": "user",
-                "content": f"Schema:\n{schema_text}\n\nStatistical summary:\n{df_summary}",
-            },
-        ],
-        max_completion_tokens=2000,
-    )
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            response_format={"type": "json_object"},
+            messages=[
+                {"role": "system", "content": INSIGHT_PROMPT},
+                {
+                    "role": "user",
+                    "content": f"Schema:\n{schema_text}\n\nStatistical summary:\n{df_summary}",
+                },
+            ],
+            max_completion_tokens=2000,
+        )
+    except Exception as e:
+        return {"code": f"result = 'Insights unavailable: {str(e)[:100]}'", "explanation": "API error"}
 
-    return json.loads(response.choices[0].message.content)
+    content = response.choices[0].message.content or ""
+    try:
+        return json.loads(content)
+    except json.JSONDecodeError:
+        return {"code": "result = 'Could not generate insights.'", "explanation": "JSON parse error"}
 
 
 def get_df_summary(df) -> str:
     """Generate a compact statistical summary of the dataframe for the LLM."""
-    import pandas as pd
-
     lines = []
 
     # Numeric columns: describe

@@ -23,7 +23,13 @@ def _run_with_retry(schema_text, question, df, chart_path, error_context=None, h
 
     for attempt in range(max_attempts):
         codegen_result = generate_code(schema_text, question, error_context=last_error, history=history)
-        code = codegen_result["code"]
+
+        # Meta-questions return answer directly, no sandbox needed
+        if codegen_result.get("_is_meta"):
+            exec_result = {"success": True, "result": codegen_result.get("answer", ""), "chart_path": None}
+            return codegen_result, exec_result
+
+        code = codegen_result.get("code", "")
         exec_result = execute_code(code, df, chart_path=chart_path)
 
         if exec_result["success"]:
@@ -51,7 +57,7 @@ def analyze(csv_path: str, question: str, chart_path: str = "chart.png", history
         return {
             "success": False,
             "error": exec_result["error"],
-            "code": codegen_result["code"],
+            "code": codegen_result.get("code", ""),
             "timings": {"total": round(t_exec, 2)},
         }
 
@@ -60,7 +66,7 @@ def analyze(csv_path: str, question: str, chart_path: str = "chart.png", history
     return {
         "success": True,
         "answer": exec_result["result"],
-        "code": codegen_result["code"],
+        "code": codegen_result.get("code", ""),
         "chart_path": exec_result.get("chart_path"),
         "explanation": codegen_result.get("explanation", ""),
         "timings": {
@@ -87,7 +93,7 @@ def analyze_with_insights(csv_path: str, question: str, chart_path: str = "chart
         return {
             "success": False,
             "error": exec_result["error"],
-            "code": codegen_result["code"],
+            "code": codegen_result.get("code", ""),
             "timings": {"total": round(t_answer, 2)},
         }
 
@@ -122,7 +128,7 @@ def analyze_with_insights(csv_path: str, question: str, chart_path: str = "chart
     return {
         "success": True,
         "answer": exec_result["result"],
-        "code": codegen_result["code"],
+        "code": codegen_result.get("code", ""),
         "chart_path": exec_result.get("chart_path"),
         "explanation": codegen_result.get("explanation", ""),
         "insights": insights_text,

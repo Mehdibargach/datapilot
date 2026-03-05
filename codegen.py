@@ -1,7 +1,14 @@
 """Code generation — calls LLM to produce pandas code from schema + question."""
 
 import json
+import re
 from openai import OpenAI
+
+META_KEYWORDS = re.compile(
+    r"\b(how did you|what method|what formula|how confident|explain.*(approach|method|calculation)|"
+    r"what.*(formula|method)|how.*(calculat|comput|analyz|deriv|predict|project))\b",
+    re.IGNORECASE,
+)
 
 SYSTEM_PROMPT = """You are a data analyst. Generate concise pandas code to answer the question.
 
@@ -41,14 +48,34 @@ plt.tight_layout(); plt.savefig(CHART_PATH, dpi=100, bbox_inches='tight', faceco
 Other: Handle NaN with dropna(). Parse dates with pd.to_datetime() if needed. No comments, no imports, no prints.
 IMPORTANT: pandas >= 2.2 — use 'ME' not 'M' for month-end frequency, 'YE' not 'Y' for year-end.
 
-META-QUESTIONS (how, why, what method, formula, confidence, explain):
-When the user asks about methodology — look at conversation history for the previous code, then set `result` to an explanation: method + formula + columns used + assumptions + limitations + confidence. Do NOT recompute — explain the previous computation. No chart needed.
-
 Return JSON: {"code": "...", "needs_chart": true/false, "explanation": "1 sentence summary"}"""
+
+META_SYSTEM = """You are a data analyst explaining your methodology. The user is asking about a PREVIOUS analysis.
+
+Here is the previous question, answer, and code:
+Question: {prev_q}
+Answer: {prev_a}
+Code: {prev_code}
+
+Explain clearly:
+1. Method used and the actual formula/logic from the code above
+2. Which columns and data were used
+3. Assumptions made
+4. Limitations (e.g., naive projection, no seasonality, limited data)
+5. Confidence level (high/medium/low with reason)
+
+Do NOT recompute anything. Just explain.
+
+Return JSON: {{"answer": "your explanation text here", "explanation": "methodology explanation"}}"""
 
 
 def generate_code(schema_text: str, question: str, error_context: str | None = None, history: list | None = None) -> dict:
     """Call LLM to generate pandas code from schema + question."""
+    # Detect meta-questions and handle with dedicated prompt
+    if history and META_KEYWORDS.search(question):
+        last = history[-1]
+        return _generate_meta_answer(last, question)
+
     client = OpenAI()
 
     messages = [
@@ -58,7 +85,7 @@ def generate_code(schema_text: str, question: str, error_context: str | None = N
 
     # Add conversation history for context
     if history:
-        for turn in history[-5:]:  # Last 5 turns max to stay within token limits
+        for turn in history[-5:]:
             messages.append({"role": "user", "content": turn["question"]})
             messages.append({"role": "assistant", "content": f"Answer: {turn['answer']}\nCode used: {turn.get('code', 'N/A')}\nExplanation: {turn.get('explanation', 'N/A')}"})
 
@@ -70,21 +97,54 @@ def generate_code(schema_text: str, question: str, error_context: str | None = N
             "content": f"Previous attempt failed. Fix this error:\n{error_context}\n\nWrite the code as multi-line (not semicolons) to avoid syntax issues.",
         })
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        response_format={"type": "json_object"},
-        messages=messages,
-        max_completion_tokens=2000,
-    )
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            response_format={"type": "json_object"},
+            messages=messages,
+            max_completion_tokens=2000,
+        )
+    except Exception as e:
+        return {"code": f"result = 'LLM service error: {str(e)[:100]}'", "needs_chart": False, "explanation": "API error"}
 
     content = response.choices[0].message.content or ""
     try:
         return json.loads(content)
     except json.JSONDecodeError:
-        # Try to extract code from malformed JSON
         if '"code"' in content:
-            import re
             match = re.search(r'"code"\s*:\s*"(.*?)"(?:\s*,|\s*})', content, re.DOTALL)
             if match:
                 return {"code": match.group(1), "needs_chart": False, "explanation": "recovered from malformed JSON"}
         return {"code": "result = 'Error: could not generate code'", "needs_chart": False, "explanation": "JSON parse error"}
+
+
+def _generate_meta_answer(prev_turn: dict, question: str) -> dict:
+    """Handle meta-questions — returns answer directly, no code execution needed."""
+    client = OpenAI()
+    system = META_SYSTEM.format(
+        prev_q=prev_turn.get("question", "N/A"),
+        prev_a=prev_turn.get("answer", "N/A"),
+        prev_code=prev_turn.get("code", "N/A"),
+    )
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            response_format={"type": "json_object"},
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": question},
+            ],
+            max_completion_tokens=1000,
+        )
+    except Exception as e:
+        return {"_is_meta": True, "answer": f"Could not explain methodology: {str(e)[:100]}", "explanation": "API error"}
+
+    content = response.choices[0].message.content or ""
+    try:
+        result = json.loads(content)
+    except json.JSONDecodeError:
+        result = {"answer": "Could not explain methodology."}
+
+    result["_is_meta"] = True
+    return result

@@ -13,8 +13,24 @@ import pandas as pd
 import seaborn as sns
 
 
+def _clean_code(code: str) -> str:
+    """Strip import lines and other LLM artifacts from generated code."""
+    lines = code.split("\n")
+    cleaned = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("import ") or stripped.startswith("from "):
+            continue
+        if stripped.startswith("```"):
+            continue
+        cleaned.append(line)
+    return "\n".join(cleaned)
+
+
 def execute_code(code: str, df: pd.DataFrame, chart_path: str = "chart.png") -> dict:
     """Execute generated pandas code in a restricted namespace."""
+    code = _clean_code(code)
+
     # Namespace with allowed libraries + the dataframe
     namespace = {
         "df": df.copy(),

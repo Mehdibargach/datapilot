@@ -1,5 +1,6 @@
 openai
-pandas
+pandas>=2.2.0
+numpy
 matplotlib
 seaborn
 fastapi
