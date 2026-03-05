@@ -12,7 +12,7 @@
 
 - [x] Application deployed (API endpoint: `https://datapilot-backend.onrender.com`)
 - [ ] **BLOCKER: Service Render suspendu** — réactiver depuis le dashboard Render
-- [ ] Web interface deployed (URL: Lovable — à connecter au backend production)
+- [x] Web interface deployed (URL: `https://the-data-pilot.lovable.app`)
 - [x] Environment variables set (OPENAI_API_KEY en production)
 - [x] CORS configured (allow_origins=["*"])
 

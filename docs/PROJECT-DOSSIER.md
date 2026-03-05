@@ -7,7 +7,7 @@
 
 **Project Name:** DataPilot
 **One-liner:** Drop a CSV, ask a question in plain language, get charts + insights in 2 seconds.
-**Live URL:** `https://datapilot-backend.onrender.com` (API) + Lovable frontend
+**Live URL:** `https://the-data-pilot.lovable.app` (frontend) + `https://datapilot-backend.onrender.com` (API)
 **GitHub:** `https://github.com/Mehdibargach/datapilot`
 **Date Shipped:** 2026-03-05
 
