@@ -77,3 +77,64 @@
 - **La latence est excellente.** 2s mediane pour une question, 10s avec insights. Le frontend aura une UX reactive.
 
 ---
+
+## Scope 2 — "Le produit fini"
+
+**Date :** 2026-03-04 / 2026-03-05
+**Duree :** ~4h (backend hardening + frontend Lovable + deploy + debug multi-turn)
+
+### Ce qui a ete fait
+
+**Backend — robustesse et nouvelles features :**
+- **Historique de conversation** (codegen.py, agent.py, api.py) : les 5 derniers echanges sont passes au LLM pour contexte multi-turn. Le frontend envoie l'historique en JSON via FormData.
+- **Detection de meta-questions** (codegen.py) : regex Python deterministe detecte les questions sur la methode ("how did you calculate?", "give me the formula"). Prompt dedie qui explique la methodologie sans re-executer de code.
+- **Fix hallucination insights** (insights.py) : le LLM copiait les exemples du prompt ("insight 1 with numbers"). Fix : forcer la generation de code qui calcule les vrais chiffres, supprimer les exemples du format JSON.
+- **Nettoyage sandbox** (sandbox.py) : suppression des lignes `import` et des backticks dans le code genere par le LLM avant execution.
+- **Gestion erreurs globale** (api.py) : try/except autour de tout l'appel d'analyse — plus de crash HTTP 500 silencieux.
+- **Multi-encodage CSV** (schema.py) : 4 encodages testes (utf-8-sig, utf-8, latin-1, cp1252) pour les fichiers uploades.
+- **Gestion erreurs OpenAI** (codegen.py, insights.py) : try/except sur tous les appels API, messages d'erreur gracieux.
+- **Dark theme insights charts** (insights.py) : memes regles que le chart principal.
+- **requirements.txt** : ajout numpy, pin pandas>=2.2.0.
+
+**Frontend — Lovable (React + Tailwind) :**
+- Interface chat : question → reponse + chart inline dans la conversation
+- Selecteur de datasets : 3 datasets demo cliquables
+- Upload CSV : drag & drop avec preview
+- Responsive mobile (375px)
+- Historique de conversation : envoi JSON au backend
+
+**Deploy :**
+- Backend FastAPI sur Render ($7/mo)
+- Frontend Lovable connecte au backend
+
+### Resultats micro-tests
+| # | Test | Resultat |
+|---|------|----------|
+| S2-1 | Upload CSV | **PASS** — drag & drop fonctionne, preview affiche |
+| S2-2 | Chat interface | **PASS** — question → reponse + chart inline |
+| S2-3 | Dataset selector | **PASS** — 3 datasets cliquables, chargement instantane |
+| S2-4 | Mobile responsive | **PASS** — utilisable sur 375px |
+| S2-5 | Deploy Render | **PASS** — backend live, frontend connecte |
+| S2-6 | Demo script 2min | **PASS** — flow complet sans accroc |
+
+### Bugs et fixes
+1. **result=None regression** : restructurer le prompt a casse la generation de `result`. Fix : "#1 RULE" en haut du prompt system pour forcer `result = f"..."` sur chaque generation.
+2. **Insights "placeholder"** : le LLM copiait l'exemple du format JSON ("insight 1 with numbers + action") au lieu de generer du vrai code. Fix : supprimer le champ `"insights"` du format JSON, forcer le calcul via code execute.
+3. **Meta-question recalcule au lieu d'expliquer** : le LLM re-executait le code au lieu d'expliquer la methode. Fix : detection regex deterministe en Python (`META_KEYWORDS`) + prompt dedie `META_SYSTEM` + bypass sandbox.
+4. **KeyError 'code' sur meta-reponses** : les meta-reponses n'ont pas de cle "code". Fix : `codegen_result.get("code", "")` partout (4 occurrences).
+5. **Imports dans le code genere** : le LLM ajoute des `import` malgre le prompt. Fix : `_clean_code()` supprime les lignes import/from avant exec.
+6. **OpenAI 500 intermittent** : erreurs aleatoires de l'API OpenAI. Fix : try/except sur tous les appels, messages d'erreur gracieux.
+7. **"Something went wrong" sur upload** : api.py avait try/finally mais pas de except → crash HTTP 500 sans JSON. Fix : except global retournant un JSON d'erreur propre.
+8. **Encodage CSV upload** : fichiers DistroKid en latin-1 crashaient. Fix : 4 encodages testes sequentiellement.
+9. **Regex meta trop etroite** : "Can you give me the method?" ne matchait pas. Fix : ajout patterns "give me", "show me", "(the|your) (method|formula|approach|logic)". 12/12 patterns testes.
+
+### Decisions techniques
+- **Regex Python > prompt pour la detection** : la detection de meta-questions par prompt etait non-deterministe (GPT-4o-mini ignorait les instructions 1 fois sur 3). La regex Python est binaire et fiable.
+- **Bypass sandbox pour meta-questions** : les reponses textuelles longues cassaient le `exec()` (guillemets, newlines). Solution : retourner la reponse directement avec un flag `_is_meta`, sans passer par le sandbox.
+- **Code-computed > LLM-generated pour insights** : les insights generes par texte contenaient des placeholders. Le code execute dans le sandbox produit les vrais chiffres.
+- **Anti-pattern identifie : prompt-patching aveugle** : modifier le prompt et push sans tester localement causait des regressions en chaine. Lesson : toujours tester localement, un seul commit propre apres validation.
+
+### Finding hors scope
+- **Schema gap donnees utilisateur** : sur un CSV DistroKid, "Quantity" somme tous les stores (Facebook 99.9%, Spotify 0.004%). L'utilisateur dit "streams" mais le CSV ne distingue pas. Ce n'est pas un bug DataPilot — c'est un probleme de semantique des donnees. Log pour le backlog V2 et materiel chapitre evaluation du livre.
+
+---
