@@ -114,7 +114,7 @@ Les 3 contraintes critiques :
 
 | Decision | Choix | Rationale |
 |----------|-------|-----------|
-| LLM | GPT-4o-mini (OpenAI) | ADR-001 : GPT-5-mini rejete (latence 5-610s). GPT-4o-mini : 2-7s, meme precision, 3-10x moins cher. |
+| LLM | GPT-4o (OpenAI) | ADR-001 : GPT-5-mini rejete (latence). ADR-004 : GPT-4o-mini → GPT-4o apres eval (55% → 90%, 0 hallucination). |
 | Pattern agent | Prompt Chaining | Pattern le plus fiable selon Anthropic (HAUTE fiabilite). Plus previsible que ReAct pour la latence. |
 | Execution code | Python subprocess sandbox | Execution locale, pas de dependance externe pour les calculs. Latence maitrisee (~1-2s). |
 | Charts | Matplotlib/Seaborn → base64 PNG | Simple, pas de dependance frontend. Chart integre dans la reponse API. |

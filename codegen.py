@@ -51,8 +51,14 @@ For long category labels: truncate to 25 chars (label[:25]+'...' if len(label)>2
 CRITICAL: If "top N" is asked, filter data to EXACTLY N rows BEFORE plotting. Chart must show exactly N bars/points.
 plt.tight_layout(); plt.savefig(CHART_PATH, dpi=100, bbox_inches='tight', facecolor='#0A0A0A')
 
+ANTI-HALLUCINATION — CRITICAL:
+- If the question asks about data, columns, or metrics NOT present in the schema, respond with: result = "This dataset does not contain [X]. Available columns are: [list relevant ones]."
+- NEVER invent proxies (e.g., do NOT use 'profit' as a proxy for 'satisfaction'). If the exact data is not there, say so.
+- If the question references a time period not covered by the data, state: result = "The data covers [start] to [end]. No data available for [requested period]."
+
 Other: Handle NaN with dropna(). Parse dates with pd.to_datetime() if needed. No comments, no imports, no prints.
 IMPORTANT: pandas >= 2.2 — use 'ME' not 'M' for month-end frequency, 'YE' not 'Y' for year-end.
+result MUST be a human-readable string, NEVER a raw DataFrame or Series. Convert to string with actual values.
 
 Return JSON: {"code": "...", "needs_chart": true/false, "explanation": "1 sentence summary"}"""
 
@@ -105,7 +111,7 @@ def generate_code(schema_text: str, question: str, error_context: str | None = N
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o",
             response_format={"type": "json_object"},
             messages=messages,
             max_completion_tokens=2000,
@@ -135,7 +141,7 @@ def _generate_meta_answer(prev_turn: dict, question: str) -> dict:
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o",
             response_format={"type": "json_object"},
             messages=[
                 {"role": "system", "content": system},

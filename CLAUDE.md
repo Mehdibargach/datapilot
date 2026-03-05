@@ -8,14 +8,20 @@ AI Agent (multi-step) — side project #3/5 in the Builder PM portfolio.
 
 ## Architecture Decisions (from 1-Pager)
 - **Agent pattern**: Prompt Chaining (most reliable, predictable latency)
-- **LLM**: GPT-4o-mini (OpenAI) — code generation + summarization. Single model. (ADR: gpt-5-mini rejecte pour latence imprevisible)
+- **LLM**: GPT-4o (OpenAI) — code generation + summarization. Single model. (ADR-001: gpt-5-mini rejecte, ADR-004: gpt-4o-mini → gpt-4o apres eval)
 - **Code execution**: Python subprocess sandbox (pandas + matplotlib/seaborn)
 - **Backend**: FastAPI (Python) — same stack as DocuQuery + WatchNext
 - **Frontend**: Lovable (React + Tailwind) — same as previous projects
 - **Deploy**: Render ($7/mo)
 
 ## Current Phase
-BUILD termine (WS + S1 + S2). Exit Criteria coches. Transition vers EVALUATE a valider par le PM.
+EVALUATE termine. Decision : **CONDITIONAL GO**. Transition vers SHIP a valider par le PM.
+
+### EVALUATE — CONDITIONAL GO
+- Round 1 (gpt-4o-mini) : 55%, 1 hallucination → NO-GO
+- Micro-loop : prompt anti-hallucination + switch gpt-4o (ADR-004)
+- Round 2 (gpt-4o) : 87.5%, 0 hallucination → CONDITIONAL GO
+- Conditions : G3 a 87.5% (seuil 90%), chart generation rate (25%), calculs marge/CPA, refus dates implicite
 
 ### Walking Skeleton — DONE (7/7 PASS)
 - Pipeline : CSV → schema → gpt-4o-mini codegen → sandbox exec → chart + answer

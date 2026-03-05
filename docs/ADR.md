@@ -113,3 +113,50 @@ Si la regex matche :
 ### Principe general
 
 **Quand une decision est binaire (oui/non), utiliser du code deterministe. Quand une decision est nuancee, utiliser le modele de langage.** La detection de meta-questions est binaire. La generation de code est nuancee. Chacune utilise l'outil adapte.
+
+---
+
+## ADR-004 : GPT-4o au lieu de GPT-4o-mini (EVALUATE micro-loop)
+
+**Date :** 2026-03-05 (EVALUATE)
+**Statut :** Accepte — remplace ADR-001 pour le modele de production
+**Contexte :** L'eval Round 1 avec GPT-4o-mini a score 55% avec 1 hallucination BLOCKING. L'hypothese : ~50% des echecs sont lies a la capacite du modele (multi-step, adversarial).
+
+### Decision
+
+Passer de GPT-4o-mini a GPT-4o pour la generation de code. Ajouter une regle anti-hallucination dans le prompt.
+
+### Donnees de l'eval A/B
+
+| Metrique | GPT-4o-mini (R1) | GPT-4o (R2) | Delta |
+|----------|-------------------|-------------|-------|
+| Score global | 55% | 90% | **+35pp** |
+| Hallucinations | 1 (BLOCKING) | 0 | **Fix** |
+| Code errors | 3 | 0 | **Fix** |
+| Aggregation | 100% (4/4) | 100% (4/4) | = |
+| Multi-step | 40% (2/5) | 100% (5/5) | **+60pp** |
+| Adversarial | 17% (0.5/3) | 83% (2.5/3) | **+66pp** |
+| Latence mediane | 3.5s | 2.1s | **-40%** |
+
+### Raisons
+
+1. **Multi-step** : GPT-4o-mini echoue sur les chaines d'operations complexes (groupby + sort + head + format). GPT-4o les resout systematiquement.
+2. **Adversarial** : GPT-4o-mini hallucine (utilise "profit" comme proxy pour "satisfaction"). GPT-4o refuse correctement grace a la regle anti-hallucination.
+3. **Latence** : GPT-4o est paradoxalement plus rapide (2.1s vs 3.5s) — probablement car il genere du code plus propre en moins de tokens.
+
+### Trade-offs
+
+| Critere | GPT-4o-mini | GPT-4o |
+|---------|-------------|--------|
+| Cout/requete | ~$0.001-0.005 | ~$0.01-0.05 |
+| Precision globale | 55% | 90% |
+| Hallucination | 1/20 (5%) | 0/20 (0%) |
+| Latence | 3.5s median | 2.1s median |
+
+Le cout est ~10x plus eleve, mais pour un projet portfolio/demo, la qualite prime. A l'echelle, on pourrait utiliser GPT-4o-mini pour les questions simples (aggregation) et GPT-4o pour les questions complexes (routing par difficulte).
+
+### Consequences
+
+- Modele de production : gpt-4o (pas gpt-4o-mini)
+- Prompt enrichi : regle anti-hallucination, regle refus dates, format renforce
+- ADR-001 reste valide comme historique (le rejet de GPT-5-mini est toujours pertinent)
