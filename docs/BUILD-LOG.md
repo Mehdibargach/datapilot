@@ -138,3 +138,37 @@
 - **Schema gap donnees utilisateur** : sur un CSV DistroKid, "Quantity" somme tous les stores (Facebook 99.9%, Spotify 0.004%). L'utilisateur dit "streams" mais le CSV ne distingue pas. Ce n'est pas un bug DataPilot — c'est un probleme de semantique des donnees. Log pour le backlog V2 et materiel chapitre evaluation du livre.
 
 ---
+
+## EVALUATE — "Le produit est-il fiable ?"
+
+**Date :** 2026-03-05
+**Duree :** ~2h (golden dataset design + 2 rounds + micro-loop)
+
+### Ce qui a ete fait
+- Golden dataset de 20 questions NOUVELLES, structurees par type (Aggregation, Trend, Comparison, Multi-step, Adversarial, Consistency)
+- Expected answers pre-calculees avec pandas (source de verite)
+- Round 1 (gpt-4o-mini) : 55%, 1 hallucination → **NO-GO**
+- Micro-loop : ajout regle anti-hallucination + switch gpt-4o (ADR-004)
+- Round 2 (gpt-4o) : 87.5%, 0 hallucination → **CONDITIONAL GO**
+
+### Decisions techniques
+1. **Regle anti-hallucination dans le prompt** : "If the question asks about data not present in the schema, say so explicitly. NEVER invent proxies." → E15 passe de HALLUCINATION a CORRECT.
+2. **GPT-4o-mini → GPT-4o** : multi-step 40% → 100%, adversarial 17% → 83%. Cout ~10x mais qualite decisive.
+3. **E8 reclasse INCORRECT** apres review PM : 3.88% (avg row) vs 2.5% (weighted) = mauvaise formule, pas juste imprecis.
+
+### Apprentissage cle
+- **Les micro-tests BUILD (22/22 PASS) ne garantissent PAS la qualite sur de nouvelles questions.** Le golden dataset eval est indispensable — c'est la qu'on decouvre les vrais problemes. Confirme l'insight central : "In AI, shipping is easy. Evaluating is hard."
+
+---
+
+## SHIP — "Le produit est entre les mains d'utilisateurs"
+
+**Date :** 2026-03-05
+
+### Ce qui a ete fait
+- Commit + push des modifications eval (gpt-4o, anti-hallucination, EVAL-REPORT, ADR-004)
+- Deploy Checklist creee
+- Project Dossier cree (portfolio piece + STAR story)
+- Service Render : a reactiver par le PM
+
+---
