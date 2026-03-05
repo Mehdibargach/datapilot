@@ -5,8 +5,14 @@ import re
 from openai import OpenAI
 
 META_KEYWORDS = re.compile(
-    r"\b(how did you|what method|what formula|how confident|explain.*(approach|method|calculation)|"
-    r"what.*(formula|method)|how.*(calculat|comput|analyz|deriv|predict|project))\b",
+    r"\b(how did you|what method|what formula|how confident|"
+    r"explain.*(approach|method|calculation)|"
+    r"what.*(formula|method)|"
+    r"how.*(calculat|comput|analyz|deriv|predict|project)|"
+    r"give me.*(formula|method|approach|explanation)|"
+    r"show me.*(formula|method|approach)|"
+    r"what approach|what technique|why did you|"
+    r"(the|your) (method|formula|approach|logic))\b",
     re.IGNORECASE,
 )
 
