@@ -72,6 +72,8 @@ async def run_analysis(
             result = analyze_with_insights(csv_path, question, chart_path=chart_path, history=history_list)
         else:
             result = analyze(csv_path, question, chart_path=chart_path, history=history_list)
+    except Exception as e:
+        return {"success": False, "error": f"Analysis failed: {str(e)[:200]}"}
     finally:
         # Clean up uploaded temp file
         if file and os.path.exists(csv_path):

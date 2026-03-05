@@ -6,9 +6,15 @@ from typing import Any
 
 def detect_schema(csv_path: str) -> tuple[pd.DataFrame, dict[str, Any]]:
     """Read CSV and detect column types, stats, sample values."""
-    # encoding='utf-8-sig' handles UTF-8 BOM automatically
-    # sep=None + engine='python' auto-detects delimiter (comma, semicolon, tab)
-    df = pd.read_csv(csv_path, encoding="utf-8-sig", sep=None, engine="python")
+    # Try multiple encodings and delimiter detection
+    for encoding in ["utf-8-sig", "utf-8", "latin-1", "cp1252"]:
+        try:
+            df = pd.read_csv(csv_path, encoding=encoding, sep=None, engine="python")
+            break
+        except (UnicodeDecodeError, pd.errors.ParserError):
+            continue
+    else:
+        raise ValueError("Could not read CSV: unsupported encoding or format.")
 
     schema = {
         "rows": len(df),
