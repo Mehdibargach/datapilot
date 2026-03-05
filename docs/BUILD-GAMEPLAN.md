@@ -99,8 +99,8 @@
 
 ## Exit Criteria (BUILD → EVALUATE)
 
-- [ ] Les 6 features MVP fonctionnelles de bout en bout
-- [ ] Riskiest Assumption testee (Skeleton Check passe)
-- [ ] Open Questions du 1-Pager resolues ou converties en ADR
-- [ ] Build Log a jour
-- [ ] Pret pour evaluation formelle contre les Success Metrics
+- [x] Les 6 features MVP fonctionnelles de bout en bout (WS 7/7, S1 9/9, S2 6/6)
+- [x] Riskiest Assumption testee (Skeleton Check passe — 7/7 PASS, mediane 3.04s, precision 100%)
+- [x] Open Questions du 1-Pager resolues (OQ1: exec() restreint, OQ2: Seaborn dark theme, OQ3: 3 datasets choisis) + 3 ADR formels
+- [x] Build Log a jour (WS + S1 + S2 documentes)
+- [x] Pret pour evaluation formelle contre les Success Metrics

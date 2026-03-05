@@ -15,7 +15,7 @@ AI Agent (multi-step) — side project #3/5 in the Builder PM portfolio.
 - **Deploy**: Render ($7/mo)
 
 ## Current Phase
-BUILD — Scope 2 DONE. Pret pour EVALUATE ou Scope 3 (si necessaire).
+BUILD termine (WS + S1 + S2). Exit Criteria coches. Transition vers EVALUATE a valider par le PM.
 
 ### Walking Skeleton — DONE (7/7 PASS)
 - Pipeline : CSV → schema → gpt-4o-mini codegen → sandbox exec → chart + answer

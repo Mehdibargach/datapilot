@@ -114,7 +114,7 @@ Les 3 contraintes critiques :
 
 | Decision | Choix | Rationale |
 |----------|-------|-----------|
-| LLM | GPT-5-mini (OpenAI) | Meme stack que DocuQuery + WatchNext. Function calling + structured output. Cout : ~$0.01-0.03/requete. |
+| LLM | GPT-4o-mini (OpenAI) | ADR-001 : GPT-5-mini rejete (latence 5-610s). GPT-4o-mini : 2-7s, meme precision, 3-10x moins cher. |
 | Pattern agent | Prompt Chaining | Pattern le plus fiable selon Anthropic (HAUTE fiabilite). Plus previsible que ReAct pour la latence. |
 | Execution code | Python subprocess sandbox | Execution locale, pas de dependance externe pour les calculs. Latence maitrisee (~1-2s). |
 | Charts | Matplotlib/Seaborn → base64 PNG | Simple, pas de dependance frontend. Chart integre dans la reponse API. |
@@ -126,11 +126,11 @@ Les 3 contraintes critiques :
 
 | Aspect | Evaluation |
 |--------|-----------|
-| Appels LLM par requete | 2 max (1 code gen + 1 resume) |
+| Appels LLM par requete | 1 seul (ADR-002 : 2→1, code genere produit directement `result`) |
 | Latence API typique | 2-5s par appel texte |
-| Worst case API congestionnee | ~25-30s (encore utilisable) |
+| Worst case API congestionnee | ~10-15s (rare, try/except avec message gracieux) |
 | Coeur de la valeur | Execution code locale (pandas) — PAS l'API |
-| Fallback si API lente | Le code s'execute quand meme, seul le resume est retarde |
+| Fallback si API lente | Le code s'execute quand meme, seul la generation est retardee |
 
 **Conclusion :** La valeur principale (analyse + charts) est dans l'execution de code locale. L'API LLM sert a generer le code et resumer — pas a produire la valeur brute.
 
@@ -150,13 +150,13 @@ Les 3 contraintes critiques :
 
 ---
 
-## Open Questions
+## Open Questions — RESOLUES
 
-1. **Sandbox securite :** `exec()` en Python est dangereux. Comment sandboxer l'execution du code genere par le LLM sans ajouter de complexite (Docker, microVM) ? → Premiere approche : `exec()` avec `globals` restreints + timeout. Evaluer si suffisant.
+1. **Sandbox securite :** `exec()` avec `globals` restreints (seuls pd, np, plt, sns, df, CHART_PATH). Suffisant pour un side project — pas d'acces fichier ni reseau. Docker/microVM rejetes (complexite disproportionnee). → **Resolu WS.**
 
-2. **Qualite visuelle des charts :** Les defaults matplotlib sont moches. Seaborn est mieux. Mais est-ce suffisant pour une demo impressionnante ? → Tester avec Seaborn + theme custom minimal.
+2. **Qualite visuelle des charts :** Seaborn + dark theme custom (#0A0A0A fond, palette indigo/vert/ambre). Resultat demo-ready. → **Resolu S1.**
 
-3. **Datasets pre-charges :** Superstore (9,994 lignes, Kaggle) est le gold standard. Quels 2 autres datasets ? → SaaS Metrics (MRR, churn, cohorts) et Marketing Spend (campaigns, CPC, conversions) a creer ou trouver.
+3. **Datasets pre-charges :** Superstore (Kaggle, 9,994 lignes), SaaS Metrics (24 lignes, cree manuellement), Marketing Spend (764 lignes, cree manuellement). → **Resolu S1.**
 
 ---
 
