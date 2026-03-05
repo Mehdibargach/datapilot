@@ -15,13 +15,21 @@ AI Agent (multi-step) — side project #3/5 in the Builder PM portfolio.
 - **Deploy**: Render ($7/mo)
 
 ## Current Phase
-EVALUATE termine. Decision : **CONDITIONAL GO**. Transition vers SHIP a valider par le PM.
+**COMPLETE — SHIP + MACRO RETRO (STOP)**
 
 ### EVALUATE — CONDITIONAL GO
 - Round 1 (gpt-4o-mini) : 55%, 1 hallucination → NO-GO
 - Micro-loop : prompt anti-hallucination + switch gpt-4o (ADR-004)
 - Round 2 (gpt-4o) : 87.5%, 0 hallucination → CONDITIONAL GO
-- Conditions : G3 a 87.5% (seuil 90%), chart generation rate (25%), calculs marge/CPA, refus dates implicite
+
+### SHIP — 2026-03-05
+- Frontend : `https://the-data-pilot.lovable.app`
+- Backend : `https://datapilot-backend.onrender.com`
+- GitHub : `https://github.com/Mehdibargach/datapilot`
+
+### MACRO RETRO — STOP
+- Les 4 conditions sont des optimisations prompt, pas des bugs critiques
+- ROI superieur a passer aux projets suivants (FeedbackSort, EvalKit)
 
 ### Walking Skeleton — DONE (7/7 PASS)
 - Pipeline : CSV → schema → gpt-4o-mini codegen → sandbox exec → chart + answer

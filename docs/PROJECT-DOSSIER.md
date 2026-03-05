@@ -90,6 +90,12 @@ Question (texte) + CSV
 
 ---
 
+## Macro Retro Decision
+
+**STOP** — L'objectif portfolio est atteint (pattern Agent + materiel livre). Les 4 conditions restantes sont des optimisations prompt, pas des bugs critiques. ROI superieur a passer a FeedbackSort (#4) et EvalKit (#5).
+
+---
+
 ## STAR Story (Interview-Ready)
 
 **Situation:** Building an AI data analyst agent as part of a portfolio of 5 AI products. Each project uses a different AI pattern (RAG, Recommendation, Agent, Classification, Evaluation).
