@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataPilot &mdash; Product Mastery Card</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #f5f5f7; --bg-card: #ffffff; --bg-subtle: #f0f0f2; --bg-hover: #fafafa;
+    --border: #e0e0e4; --border-light: #ebebee;
+    --text: #1d1d1f; --text-secondary: #515154; --text-muted: #86868b;
+    --accent: #1d1d1f; --accent-bg: #f0f0f2; --accent-border: #d2d2d7;
+    --callout-bg: #f5f5f7; --callout-border: #d2d2d7; --callout-text: #1d1d1f; --callout-muted: #515154;
+    --header-bg: #1d1d1f; --header-text: #f5f5f7;
+    --pitch-bg: #1d1d1f; --pitch-text: #e8e8ed; --pitch-accent: #a1a1a6;
+    --badge-blocking-bg: #1d1d1f; --badge-blocking-text: #ffffff;
+    --badge-quality-bg: #515154; --badge-quality-text: #ffffff;
+    --badge-signal-bg: #86868b; --badge-signal-text: #ffffff;
+    --step-number-bg: #1d1d1f; --step-number-text: #ffffff;
+    --step-box-bg: #1d1d1f; --step-box-text: #ffffff;
+    --toggle-bg: rgba(0,0,0,0.06); --toggle-hover: rgba(0,0,0,0.1);
+    --code-bg: #e8e8ed;
+  }
+
+  [data-theme="dark"] {
+    --bg: #0a0a0a; --bg-card: #141414; --bg-subtle: #1c1c1e; --bg-hover: #1c1c1e;
+    --border: #2c2c2e; --border-light: #232326;
+    --text: #f5f5f7; --text-secondary: #a1a1a6; --text-muted: #6e6e73;
+    --accent: #f5f5f7; --accent-bg: #1c1c1e; --accent-border: #3a3a3c;
+    --callout-bg: #1c1c1e; --callout-border: #2c2c2e; --callout-text: #f5f5f7; --callout-muted: #a1a1a6;
+    --header-bg: #141414; --header-text: #f5f5f7;
+    --pitch-bg: #1c1c1e; --pitch-text: #d1d1d6; --pitch-accent: #86868b;
+    --badge-blocking-bg: #f5f5f7; --badge-blocking-text: #0a0a0a;
+    --badge-quality-bg: #a1a1a6; --badge-quality-text: #0a0a0a;
+    --badge-signal-bg: #6e6e73; --badge-signal-text: #0a0a0a;
+    --step-number-bg: #f5f5f7; --step-number-text: #0a0a0a;
+    --step-box-bg: #f5f5f7; --step-box-text: #0a0a0a;
+    --toggle-bg: rgba(255,255,255,0.08); --toggle-hover: rgba(255,255,255,0.14);
+    --code-bg: #2c2c2e;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text); background: var(--bg); line-height: 1.65; font-size: 15px;
+    padding: 40px 20px; transition: background 0.3s, color 0.3s; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  .theme-toggle {
+    position: fixed; top: 20px; right: 24px; z-index: 100;
+    display: flex; align-items: center; gap: 8px;
+    background: var(--toggle-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px;
+    cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text-secondary); transition: background 0.2s;
+  }
+  .theme-toggle:hover { background: var(--toggle-hover); }
+  .theme-toggle .icon { font-size: 15px; line-height: 1; }
+
+  .header {
+    background: var(--header-bg); color: var(--header-text);
+    padding: 40px 44px; border-radius: 14px; margin-bottom: 28px; border: 1px solid var(--border);
+  }
+  .header-badge {
+    display: inline-block; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
+    font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 5px 12px; border-radius: 16px; margin-bottom: 14px;
+  }
+  [data-theme="dark"] .header-badge { background: rgba(255,255,255,0.06); }
+  .header h1 { font-size: 30px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.5px; }
+  .header-subtitle { font-size: 15px; color: rgba(255,255,255,0.5); font-weight: 400; }
+
+  .section {
+    background: var(--bg-card); border-radius: 12px; padding: 32px 36px;
+    margin-bottom: 20px; border: 1px solid var(--border); transition: background 0.3s, border-color 0.3s;
+  }
+  .section-number {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; background: var(--step-number-bg); color: var(--step-number-text);
+    font-size: 13px; font-weight: 700; border-radius: 7px; margin-bottom: 12px; transition: background 0.3s, color 0.3s;
+  }
+  .section h2 { font-size: 21px; font-weight: 700; color: var(--text); margin-bottom: 18px; letter-spacing: -0.3px; }
+  .section p { margin-bottom: 14px; color: var(--text-secondary); }
+
+  .one-liner {
+    background: var(--accent-bg); border-left: 3px solid var(--accent);
+    padding: 22px 26px; border-radius: 0 10px 10px 0; margin-bottom: 20px; transition: background 0.3s, border-color 0.3s;
+  }
+  .one-liner p { font-size: 17px; font-weight: 500; color: var(--text); margin: 0; line-height: 1.5; }
+
+  table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    margin: 14px 0; font-size: 14px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);
+  }
+  thead th {
+    background: var(--bg-subtle); color: var(--text-muted); font-weight: 600; text-align: left;
+    padding: 10px 14px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border);
+  }
+  tbody td { padding: 12px 14px; border-bottom: 1px solid var(--border-light); vertical-align: top; color: var(--text-secondary); }
+  tbody tr:last-child td { border-bottom: none; }
+  .problem-table td:first-child { font-weight: 600; color: var(--text); white-space: nowrap; width: 200px; }
+
+  .pipeline-flow { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 26px 0; flex-wrap: wrap; }
+  .pipeline-step { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .pipeline-step .step-box {
+    background: var(--step-box-bg); color: var(--step-box-text);
+    font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 8px; letter-spacing: 0.5px; transition: background 0.3s, color 0.3s;
+  }
+  .pipeline-step .step-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+  .pipeline-arrow { color: var(--text-muted); font-size: 18px; margin-top: -16px; }
+
+  .step-detail { border: 1px solid var(--border); border-radius: 10px; margin: 18px 0; overflow: hidden; transition: border-color 0.3s; }
+  .step-detail-header {
+    display: flex; align-items: center; gap: 10px; padding: 14px 18px;
+    background: var(--bg-subtle); border-bottom: 1px solid var(--border); transition: background 0.3s;
+  }
+  .step-detail-number {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; background: var(--step-number-bg); color: var(--step-number-text);
+    font-size: 12px; font-weight: 700; border-radius: 6px; flex-shrink: 0; transition: background 0.3s, color 0.3s;
+  }
+  .step-detail-title { font-weight: 700; font-size: 14px; color: var(--text); }
+  .step-detail-title span { font-weight: 400; color: var(--text-muted); margin-left: 6px; }
+  .step-detail-body { padding: 18px; }
+  .step-detail-body .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .col-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--text-muted); }
+  .col-what p, .col-why p { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; }
+
+  .callout, .deep-dive, .key-insight {
+    background: var(--callout-bg); border: 1px solid var(--callout-border);
+    border-radius: 8px; padding: 16px 18px; margin: 14px 0; transition: background 0.3s, border-color 0.3s;
+  }
+  .callout-title, .deep-dive-title {
+    font-size: 12px; font-weight: 700; color: var(--text-muted);
+    margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.6px;
+  }
+  .callout p, .deep-dive p, .key-insight p { font-size: 14px; color: var(--callout-muted); margin-bottom: 8px; }
+  .callout p:last-child, .deep-dive p:last-child, .key-insight p:last-child { margin-bottom: 0; }
+  .key-insight { border-left: 3px solid var(--text-muted); border-radius: 0 8px 8px 0; }
+  code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-size: 13px; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; transition: background 0.3s; }
+
+  .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0; }
+  .metric-card {
+    border-radius: 10px; padding: 18px; text-align: center;
+    border: 1px solid var(--border); background: var(--bg-subtle); transition: background 0.3s, border-color 0.3s;
+  }
+  .metric-badge {
+    display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; padding: 3px 10px; border-radius: 10px; margin-bottom: 10px;
+  }
+  .blocking .metric-badge { background: var(--badge-blocking-bg); color: var(--badge-blocking-text); }
+  .quality .metric-badge { background: var(--badge-quality-bg); color: var(--badge-quality-text); }
+  .signal .metric-badge { background: var(--badge-signal-bg); color: var(--badge-signal-text); }
+  .metric-value { font-size: 30px; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; color: var(--text); }
+  .metric-label { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .metric-desc { font-size: 11px; color: var(--text-muted); line-height: 1.45; }
+
+  .severity-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; }
+  .severity-tag.blocking { background: var(--badge-blocking-bg); color: var(--badge-blocking-text); }
+  .severity-tag.quality { background: var(--badge-quality-bg); color: var(--badge-quality-text); }
+  .severity-tag.signal { background: var(--badge-signal-bg); color: var(--badge-signal-text); }
+
+  .pitch-box {
+    background: var(--pitch-bg); color: var(--pitch-text); border-radius: 10px;
+    padding: 28px 32px; margin: 18px 0; line-height: 1.7; font-size: 14px;
+    border: 1px solid var(--border); transition: background 0.3s, border-color 0.3s;
+  }
+  .pitch-box p { color: var(--pitch-text); margin-bottom: 12px; }
+  .pitch-box p:last-child { margin-bottom: 0; }
+  .pitch-box strong { color: var(--pitch-accent); }
+  [data-theme="dark"] .pitch-box strong { color: #f5f5f7; }
+
+  .concepts-table td:first-child { font-weight: 700; color: var(--text); width: 190px; }
+  .concepts-table td:nth-child(3) { color: var(--text-muted); font-style: italic; font-size: 13px; }
+
+  .questions-list { list-style: none; counter-reset: question; }
+  .questions-list li {
+    counter-increment: question; padding: 12px 14px 12px 48px; position: relative;
+    border-bottom: 1px solid var(--border-light); color: var(--text-secondary); font-size: 14px;
+  }
+  .questions-list li:last-child { border-bottom: none; }
+  .questions-list li::before {
+    content: counter(question, decimal-leading-zero); position: absolute; left: 14px; top: 12px;
+    font-size: 13px; font-weight: 800; color: var(--text-muted);
+  }
+
+  .archi-diagram {
+    background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 10px;
+    padding: 24px; margin: 18px 0; overflow-x: auto; transition: background 0.3s, border-color 0.3s;
+  }
+  .archi-diagram pre {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 12px; line-height: 1.5; color: var(--text-secondary); margin: 0; white-space: pre;
+  }
+
+  .footer { text-align: center; padding: 20px 0 12px; color: var(--text-muted); font-size: 12px; }
+  strong { font-weight: 700; }
+
+  @media print {
+    body { background: white !important; color: #1d1d1f !important; padding: 0; font-size: 12px; }
+    .theme-toggle { display: none !important; }
+    .container { max-width: 100%; }
+    .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; margin-bottom: 16px; padding: 24px 28px; }
+    .section {
+      box-shadow: none; border: 1px solid #d2d2d7; padding: 20px 24px;
+      margin-bottom: 14px; page-break-inside: avoid; background: white !important;
+    }
+    .step-detail { page-break-inside: avoid; }
+    .metric-card, .callout, .deep-dive, .key-insight, .pitch-box,
+    .pipeline-step .step-box, .section-number, .step-detail-number,
+    .metric-badge, .severity-tag, .archi-diagram {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .section-page-break { page-break-before: always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="theme-toggle" onclick="toggleTheme()">
+  <span class="icon" id="theme-icon">&#9788;</span>
+  <span id="theme-label">Light</span>
+</div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-badge">Product Mastery Card</div>
+    <h1>DataPilot</h1>
+    <div class="header-subtitle">Mehdi Bargach &middot; 2026</div>
+  </div>
+
+  <!-- EN 1 PHRASE -->
+  <div class="one-liner">
+    <p>Un agent AI qui analyse n'importe quel fichier CSV&nbsp;: tu poses une question en langage naturel, et il g&eacute;n&egrave;re du code d'analyse, l'ex&eacute;cute dans un environnement s&eacute;curis&eacute;, et te retourne la r&eacute;ponse avec un graphique &mdash; en 2 secondes.</p>
+  </div>
+
+  <!-- 1. LE PROBLÈME -->
+  <div class="section">
+    <div class="section-number">1</div>
+    <h2>Le probl&egrave;me</h2>
+    <p><strong>Situation&nbsp;:</strong> tu as un fichier CSV (export Shopify, Google Ads, Stripe, CRM...) et tu veux savoir quelque chose.</p>
+    <table class="problem-table">
+      <thead><tr><th>Option</th><th>Ce qui se passe</th><th>Pourquoi c'est cass&eacute;</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Excel / Google Sheets</td>
+          <td>Tableaux crois&eacute;s, formules VLOOKUP, graphiques manuels</td>
+          <td><strong>30-60 minutes</strong> pour r&eacute;pondre &agrave; UNE question. Chaque semaine. Et tu dois savoir ce que tu cherches.</td>
+        </tr>
+        <tr>
+          <td>ChatGPT Code Interpreter</td>
+          <td>Upload le CSV, pose une question, obtiens une r&eacute;ponse</td>
+          <td>La session <strong>expire apr&egrave;s 30 min</strong>. Les fichiers disparaissent. Tu dois tout re-uploader. C'est un couteau suisse, pas un outil d&eacute;di&eacute;.</td>
+        </tr>
+        <tr>
+          <td>Tableau / Power BI / Looker</td>
+          <td>Dashboards interactifs, puissants</td>
+          <td>Faits pour les <strong>&eacute;quipes data</strong>. Un marketing manager ne va pas apprendre SQL pour savoir quel canal baisse.</td>
+        </tr>
+        <tr>
+          <td>Ne rien faire</td>
+          <td>Prendre des d&eacute;cisions au feeling</td>
+          <td>Personne ne cherche ce que tu n'as <strong>pas demand&eacute;</strong>. Les insights cach&eacute;s restent cach&eacute;s.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><strong>Le vrai besoin&nbsp;:</strong> poser une question en fran&ccedil;ais ou en anglais &agrave; tes donn&eacute;es, et recevoir la r&eacute;ponse avec un graphique &mdash; sans code, sans config, sans attente.</p>
+  </div>
+
+  <!-- 2. L'ARCHITECTURE -->
+  <div class="section">
+    <div class="section-number">2</div>
+    <h2>L'architecture &mdash; Prompt Chaining</h2>
+
+    <p>DataPilot utilise un pattern appel&eacute; <strong>Prompt Chaining</strong> (cha&icirc;nage de prompts). C'est le plus simple et le plus fiable des patterns d'agents AI&nbsp;:</p>
+
+    <table>
+      <thead><tr><th>Pattern</th><th>Comment &ccedil;a marche</th><th>Pourquoi DataPilot l'utilise</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Prompt Chaining</strong></td>
+          <td>Des &eacute;tapes fix&eacute;es, dans un ordre pr&eacute;cis. Chaque &eacute;tape re&ccedil;oit le r&eacute;sultat de la pr&eacute;c&eacute;dente.</td>
+          <td>Fiable, pr&eacute;visible, facile &agrave; d&eacute;bugger. Si une &eacute;tape &eacute;choue, on sait laquelle.</td>
+        </tr>
+        <tr>
+          <td>ReAct (alternative)</td>
+          <td>Le LLM d&eacute;cide lui-m&ecirc;me quelles &eacute;tapes prendre. Il r&eacute;fl&eacute;chit, agit, observe, et recommence.</td>
+          <td>Plus flexible mais impr&eacute;visible. La latence peut varier de 2s &agrave; 60s selon le chemin choisi.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <div class="callout-title">Pourquoi un seul appel LLM et pas deux&nbsp;?</div>
+      <p>Le design initial pr&eacute;voyait 2 appels&nbsp;: (1) g&eacute;n&eacute;rer le code, (2) r&eacute;sumer le r&eacute;sultat en langage naturel. Le 2&egrave;me appel ajoutait <strong>~3 secondes</strong> sans apporter de valeur. Fix&nbsp;: le code g&eacute;n&eacute;r&eacute; inclut directement <code>result = f"..."</code> &mdash; la r&eacute;ponse est format&eacute;e d&egrave;s l'ex&eacute;cution, pas besoin d'un deuxi&egrave;me appel.</p>
+    </div>
+  </div>
+
+  <!-- 3. LE STACK COMPLET -->
+  <div class="section">
+    <div class="section-number">3</div>
+    <h2>Le stack complet</h2>
+
+    <table>
+      <thead><tr><th>Couche</th><th>Techno</th><th>C'est quoi</th><th>Pourquoi ce choix</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Frontend</strong></td>
+          <td>React + Tailwind (Lovable)</td>
+          <td>L'interface&nbsp;: chat, upload CSV, s&eacute;lecteur de datasets, affichage r&eacute;ponse + chart</td>
+          <td>Lovable = outil no-code qui g&eacute;n&egrave;re du React via des prompts. M&ecirc;me stack que DocuQuery et WatchNext.</td>
+        </tr>
+        <tr>
+          <td><strong>Backend</strong></td>
+          <td>FastAPI (Python)</td>
+          <td>Le serveur qui orchestre le pipeline&nbsp;: question &rarr; code &rarr; ex&eacute;cution &rarr; r&eacute;ponse</td>
+          <td>M&ecirc;me framework que les 2 projets pr&eacute;c&eacute;dents. 1 seul endpoint m&eacute;tier (<code>/analyze</code>).</td>
+        </tr>
+        <tr>
+          <td><strong>H&eacute;bergement</strong></td>
+          <td>Render ($7/mois)</td>
+          <td>Le service cloud qui fait tourner le backend 24/7</td>
+          <td>D&eacute;ploiement auto &agrave; chaque push GitHub. M&ecirc;me infra que DocuQuery et WatchNext.</td>
+        </tr>
+        <tr>
+          <td><strong>LLM</strong></td>
+          <td>GPT-4o (OpenAI)</td>
+          <td>1 appel&nbsp;: g&eacute;n&egrave;re du code pandas &agrave; partir de la question + sch&eacute;ma du CSV</td>
+          <td>GPT-4o-mini test&eacute; d'abord (55% en eval). GPT-4o&nbsp;: 87.5%, z&eacute;ro hallucination. Qualit&eacute; d&eacute;cisive.</td>
+        </tr>
+        <tr>
+          <td><strong>Execution</strong></td>
+          <td>Python subprocess (pandas + matplotlib)</td>
+          <td>Le code g&eacute;n&eacute;r&eacute; par le LLM est ex&eacute;cut&eacute; dans un processus isol&eacute;</td>
+          <td>Pas de d&eacute;pendance externe pour les calculs. S&eacute;curis&eacute; (subprocess, pas eval).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4. SCHÉMA D'ARCHITECTURE -->
+  <div class="section">
+    <div class="section-number">4</div>
+    <h2>Le sch&eacute;ma d'architecture</h2>
+
+    <div class="archi-diagram">
+      <pre>&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;        &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+&#9474;                  &#9474; HTTPS  &#9474;           FASTAPI (Render)          &#9474;
+&#9474;  FRONTEND        &#9474;&#9472;&#9472;&#9472;&#9472;&#9472;&#9654;&#9474;                                    &#9474;
+&#9474;  React/Tailwind  &#9474;       &#9474;  POST /analyze                      &#9474;
+&#9474;  (Lovable)       &#9474;&#9668;&#9472;&#9472;&#9472;&#9472;&#9472;&#9474;    &#9474;                               &#9474;
+&#9474;                  &#9474; JSON  &#9474;    &#9500;&#9472;&#9472; schema.py &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508; CSV file
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;        &#9474;    &#9474;                          &#9474;
+                             &#9474;    &#9500;&#9472;&#9472; codegen.py &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;&#9472;&#9472;&#9472;&#9654; OpenAI API
+                             &#9474;    &#9474;                          &#9474;     (GPT-4o)
+                             &#9474;    &#9500;&#9472;&#9472; sandbox.py &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508; subprocess
+                             &#9474;    &#9474;                          &#9474;  (pandas/matplotlib)
+                             &#9474;    &#9500;&#9472;&#9472; insights.py &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508; proactive scan
+                             &#9474;    &#9474;                          &#9474;
+                             &#9474;    &#9660;                          &#9474;
+                             &#9474;  JSON: answer + chart (base64)     &#9474;
+                             &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</pre>
+    </div>
+
+    <p><strong>Le flux&nbsp;:</strong> le frontend envoie une question + un CSV (ou un nom de dataset demo). Le backend orchestre 4 modules s&eacute;quentiels (schema &rarr; codegen &rarr; sandbox &rarr; agent) et retourne la r&eacute;ponse + le chart en base64. <strong>1 seul appel LLM</strong> par requ&ecirc;te.</p>
+  </div>
+
+  <!-- 5. LE PIPELINE -->
+  <div class="section section-page-break">
+    <div class="section-number">5</div>
+    <h2>Le pipeline &mdash; 4 &eacute;tapes</h2>
+
+    <p>Chaque &eacute;tape est un <strong>module Python ind&eacute;pendant</strong>, orchestr&eacute; par <code>agent.py</code>.</p>
+
+    <div class="pipeline-flow">
+      <div class="pipeline-step"><div class="step-box">SCHEMA</div><div class="step-label">CSV &rarr; structure</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step"><div class="step-box">CODEGEN</div><div class="step-label">question &rarr; code</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step"><div class="step-box">SANDBOX</div><div class="step-label">code &rarr; r&eacute;sultat</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step"><div class="step-box">ANSWER</div><div class="step-label">r&eacute;ponse + chart</div></div>
+    </div>
+
+    <!-- SCHEMA -->
+    <div class="step-detail">
+      <div class="step-detail-header">
+        <div class="step-detail-number">1</div>
+        <div class="step-detail-title">SCHEMA <span>CSV &rarr; structure &middot; schema.py</span></div>
+      </div>
+      <div class="step-detail-body">
+        <div class="two-col">
+          <div class="col-what">
+            <div class="col-label">Ce qui se passe</div>
+            <p>Le fichier CSV est lu avec <strong>d&eacute;tection automatique</strong> de l'encodage (UTF-8, Latin-1, etc.) et du s&eacute;parateur (virgule, point-virgule, tabulation). Le module extrait les noms de colonnes, les types de donn&eacute;es, et un &eacute;chantillon des premi&egrave;res lignes.</p>
+          </div>
+          <div class="col-why">
+            <div class="col-label">Pourquoi on fait &ccedil;a</div>
+            <p>Le LLM a besoin de <strong>comprendre la structure</strong> du CSV avant de pouvoir g&eacute;n&eacute;rer du code. C'est comme donner le sommaire d'un livre avant de poser des questions dessus &mdash; sans le sommaire, le LLM devinerait.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CODEGEN -->
+    <div class="step-detail">
+      <div class="step-detail-header">
+        <div class="step-detail-number">2</div>
+        <div class="step-detail-title">CODEGEN <span>question &rarr; code pandas &middot; codegen.py</span></div>
+      </div>
+      <div class="step-detail-body">
+        <div class="two-col">
+          <div class="col-what">
+            <div class="col-label">Ce qui se passe</div>
+            <p>Le sch&eacute;ma du CSV + la question de l'utilisateur sont envoy&eacute;s &agrave; <strong>GPT-4o</strong>. Le mod&egrave;le retourne du <strong>code Python (pandas)</strong> qui r&eacute;pond &agrave; la question, incluant une variable <code>result</code> avec la r&eacute;ponse format&eacute;e.</p>
+            <p>Le mod&egrave;le retourne aussi un flag <code>needs_chart</code> et optionnellement du code matplotlib pour g&eacute;n&eacute;rer un graphique.</p>
+          </div>
+          <div class="col-why">
+            <div class="col-label">Pourquoi on fait &ccedil;a</div>
+            <p>Au lieu de demander au LLM de r&eacute;pondre directement (&laquo;&nbsp;le total est 2 millions&nbsp;&raquo;), on lui demande de <strong>g&eacute;n&eacute;rer du code</strong>. Le code est ensuite ex&eacute;cut&eacute; sur les vraies donn&eacute;es. R&eacute;sultat&nbsp;: les chiffres viennent d'un calcul r&eacute;el, pas de la m&eacute;moire du LLM. Z&eacute;ro hallucination sur les nombres.</p>
+          </div>
+        </div>
+
+        <div class="key-insight">
+          <p><strong>Insight cl&eacute;&nbsp;:</strong> le LLM ne voit <strong>jamais les donn&eacute;es compl&egrave;tes</strong>. Il ne voit que le sch&eacute;ma (colonnes + types + &eacute;chantillon). C'est le code g&eacute;n&eacute;r&eacute; qui touche les donn&eacute;es. C'est pour &ccedil;a qu'il ne peut pas halluciner les chiffres &mdash; ils viennent de l'ex&eacute;cution, pas de la g&eacute;n&eacute;ration.</p>
+        </div>
+
+        <div class="deep-dive">
+          <div class="deep-dive-title">R&egrave;gle anti-hallucination dans le prompt</div>
+          <p>Le prompt contient cette r&egrave;gle&nbsp;: &laquo;&nbsp;If the question asks about data not present in the schema, say so explicitly. NEVER invent proxies.&nbsp;&raquo;</p>
+          <p><strong>Exemple&nbsp;:</strong> &laquo;&nbsp;What is the customer satisfaction score?&nbsp;&raquo; sur un CSV sans colonne satisfaction &rarr; le mod&egrave;le r&eacute;pond &laquo;&nbsp;This dataset does not contain customer satisfaction data&nbsp;&raquo; au lieu d'inventer un proxy (comme utiliser le profit).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SANDBOX -->
+    <div class="step-detail">
+      <div class="step-detail-header">
+        <div class="step-detail-number">3</div>
+        <div class="step-detail-title">SANDBOX <span>code &rarr; r&eacute;sultat &middot; sandbox.py</span></div>
+      </div>
+      <div class="step-detail-body">
+        <div class="two-col">
+          <div class="col-what">
+            <div class="col-label">Ce qui se passe</div>
+            <p>Le code Python g&eacute;n&eacute;r&eacute; est ex&eacute;cut&eacute; dans un <strong>subprocess isol&eacute;</strong>. Le sandbox pr&eacute;charge le CSV en tant que DataFrame <code>df</code>, plus les librairies (pandas, numpy, matplotlib, seaborn). Il netttoie le code (supprime les imports, les print, etc.) avant de l'ex&eacute;cuter.</p>
+          </div>
+          <div class="col-why">
+            <div class="col-label">Pourquoi on fait &ccedil;a</div>
+            <p><strong>S&eacute;curit&eacute;&nbsp;:</strong> le code est ex&eacute;cut&eacute; dans un processus s&eacute;par&eacute;, pas avec <code>eval()</code>. Si le code plante, le serveur principal n'est pas affect&eacute;.</p>
+            <p><strong>Retry&nbsp;:</strong> si le code &eacute;choue, l'erreur est renvoy&eacute;e au LLM qui g&eacute;n&egrave;re une version corrig&eacute;e. Maximum 2 tentatives.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANSWER -->
+    <div class="step-detail">
+      <div class="step-detail-header">
+        <div class="step-detail-number">4</div>
+        <div class="step-detail-title">ANSWER <span>r&eacute;ponse + chart &middot; agent.py</span></div>
+      </div>
+      <div class="step-detail-body">
+        <div class="two-col">
+          <div class="col-what">
+            <div class="col-label">Ce qui se passe</div>
+            <p>L'orchestrateur (<code>agent.py</code>) r&eacute;cup&egrave;re le <code>result</code> (texte) et le chart (PNG sauv&eacute; sur disque). Il assemble la r&eacute;ponse finale avec les timings et optionnellement des <strong>insights proactifs</strong> (anomalies, tendances d&eacute;tect&eacute;es automatiquement).</p>
+          </div>
+          <div class="col-why">
+            <div class="col-label">Pourquoi on fait &ccedil;a</div>
+            <p>Les insights proactifs r&eacute;pondent aux questions que l'utilisateur n'a <strong>pas pos&eacute;es</strong>. C'est la diff&eacute;rence entre un outil qui attend tes questions et un analyste qui dit &laquo;&nbsp;hey, j'ai remarqu&eacute; un truc bizarre dans tes donn&eacute;es&nbsp;&raquo;.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. DETECTION META-QUESTIONS -->
+  <div class="section">
+    <div class="section-number">6</div>
+    <h2>La d&eacute;tection des m&eacute;ta-questions</h2>
+
+    <p>Quand l'utilisateur demande &laquo;&nbsp;comment tu as calcul&eacute; &ccedil;a&nbsp;?&nbsp;&raquo;, l'agent ne doit pas recalculer &mdash; il doit <strong>expliquer sa m&eacute;thode</strong>.</p>
+
+    <table>
+      <thead><tr><th>Approche</th><th>Fiabilit&eacute;</th><th>Risque</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Modifier le prompt</strong></td>
+          <td>~70%</td>
+          <td>Le LLM ignore l'instruction 1 fois sur 3. Pire&nbsp;: modifier le prompt cause des <strong>r&eacute;gressions</strong> sur toutes les autres questions.</td>
+        </tr>
+        <tr>
+          <td><strong>Regex Python + prompt d&eacute;di&eacute;</strong></td>
+          <td>~100%</td>
+          <td>Z&eacute;ro impact sur le prompt principal. D&eacute;tection d&eacute;terministe (le code dit oui ou non, pas &laquo;&nbsp;peut-&ecirc;tre&nbsp;&raquo;).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="key-insight">
+      <p><strong>Principe g&eacute;n&eacute;ral&nbsp;:</strong> quand une d&eacute;cision est <strong>binaire</strong> (oui/non), utiliser du code d&eacute;terministe. Quand une d&eacute;cision est <strong>nuanc&eacute;e</strong>, utiliser le LLM. La d&eacute;tection de m&eacute;ta-questions est binaire. La g&eacute;n&eacute;ration de code analytique est nuanc&eacute;e. Chacune utilise l'outil adapt&eacute;.</p>
+    </div>
+  </div>
+
+  <!-- 7. L'HISTOIRE DU NO-GO -->
+  <div class="section section-page-break">
+    <div class="section-number">7</div>
+    <h2>L'histoire du NO-GO &mdash; le micro-loop</h2>
+
+    <p>Le premier round d'&eacute;valuation a donn&eacute; un <strong>NO-GO</strong> &agrave; 55%. Le deuxi&egrave;me round, apr&egrave;s 2 fixes, a donn&eacute; un <strong>CONDITIONAL GO</strong> &agrave; 87.5%.</p>
+
+    <table>
+      <thead><tr><th>M&eacute;trique</th><th>Round 1 (GPT-4o-mini)</th><th>Round 2 (GPT-4o)</th><th>Delta</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Score global</strong></td><td>55%</td><td><strong>87.5%</strong></td><td>+32.5pp</td></tr>
+        <tr><td><strong>Hallucinations</strong></td><td>1 (BLOCKING)</td><td><strong>0</strong></td><td>Fix&eacute;</td></tr>
+        <tr><td><strong>Multi-step</strong></td><td>40%</td><td><strong>100%</strong></td><td>+60pp</td></tr>
+        <tr><td><strong>Adversarial</strong></td><td>17%</td><td><strong>83%</strong></td><td>+66pp</td></tr>
+        <tr><td><strong>Latence</strong></td><td>3.5s</td><td><strong>2.1s</strong></td><td>-40%</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Le bug critique&nbsp;:</strong> &laquo;&nbsp;What is the customer satisfaction score?&nbsp;&raquo; sur un CSV qui n'a pas de colonne satisfaction. Au lieu de refuser, le mod&egrave;le a <strong>invent&eacute;</strong> que le profit pouvait servir de proxy pour la satisfaction. C'est une hallucination.</p>
+
+    <p><strong>Les 2 fixes&nbsp;:</strong></p>
+    <table>
+      <thead><tr><th>#</th><th>Fix</th><th>Impact</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td>R&egrave;gle anti-hallucination dans le prompt&nbsp;: &laquo;&nbsp;If the data is not in the schema, say so. NEVER invent proxies.&nbsp;&raquo;</td>
+          <td>Hallucination E15 &rarr; refus correct. 0/20 hallucinations.</td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td>Upgrade du mod&egrave;le&nbsp;: GPT-4o-mini &rarr; GPT-4o</td>
+          <td>Multi-step 40% &rarr; 100%. Le mod&egrave;le g&eacute;n&egrave;re du code correct pour les questions complexes (groupby + sort + head + format).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="key-insight">
+      <p><strong>Insight cl&eacute;&nbsp;:</strong> les micro-tests du BUILD (22/22 PASS) ne garantissent <strong>pas</strong> la qualit&eacute; sur de nouvelles questions. L'&eacute;val avec un golden dataset NOUVEAU est indispensable &mdash; c'est l&agrave; qu'on d&eacute;couvre les vrais probl&egrave;mes. <strong>&laquo;&nbsp;In AI, shipping is easy. Evaluating is hard.&nbsp;&raquo;</strong></p>
+    </div>
+  </div>
+
+  <!-- 8. MÉTRIQUES -->
+  <div class="section">
+    <div class="section-number">8</div>
+    <h2>M&eacute;triques d'&eacute;valuation</h2>
+
+    <p>Un agent d'analyse de donn&eacute;es peut &eacute;chouer de 3 fa&ccedil;ons&nbsp;: inventer des chiffres, se tromper dans les calculs, ou planter sur du code invalide.</p>
+
+    <table>
+      <thead><tr><th>Niveau</th><th>Signification</th></tr></thead>
+      <tbody>
+        <tr><td><span class="severity-tag blocking">BLOCKING</span></td><td>Si &ccedil;a &eacute;choue, on ne shippe pas. Non-n&eacute;gociable.</td></tr>
+        <tr><td><span class="severity-tag quality">QUALITY</span></td><td>Seuil configurable. On &eacute;value si c'est acceptable.</td></tr>
+        <tr><td><span class="severity-tag signal">SIGNAL</span></td><td>On mesure pour monitorer. Ne bloque pas le ship.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="metrics-grid">
+      <div class="metric-card blocking">
+        <div class="metric-badge">BLOCKING</div>
+        <div class="metric-value">0/20</div>
+        <div class="metric-label">Hallucinations</div>
+        <div class="metric-desc">Z&eacute;ro donn&eacute;e invent&eacute;e sur 20 questions. Le mod&egrave;le refuse correctement quand la donn&eacute;e n'existe pas.</div>
+      </div>
+      <div class="metric-card blocking">
+        <div class="metric-badge">BLOCKING</div>
+        <div class="metric-value">4/4</div>
+        <div class="metric-label">Agr&eacute;gation exacte</div>
+        <div class="metric-desc">Sommes, moyennes, pourcentages &mdash; 100% corrects. Les chiffres simples ne se trompent jamais.</div>
+      </div>
+      <div class="metric-card quality">
+        <div class="metric-badge">QUALITY</div>
+        <div class="metric-value">87.5%</div>
+        <div class="metric-label">Pr&eacute;cision globale</div>
+        <div class="metric-desc">17.5/20 questions. Seuil &agrave; 90%. Les 4 &eacute;carts sont des calculs de marge/CPA et des formats.</div>
+      </div>
+      <div class="metric-card signal">
+        <div class="metric-badge">SIGNAL</div>
+        <div class="metric-value">2.1s</div>
+        <div class="metric-label">Latence m&eacute;diane</div>
+        <div class="metric-desc">1 appel LLM + 1 ex&eacute;cution sandbox. Seuil &agrave; 15s. 7x sous le seuil.</div>
+      </div>
+      <div class="metric-card quality">
+        <div class="metric-badge">QUALITY</div>
+        <div class="metric-value">2/2</div>
+        <div class="metric-label">Charts corrects</div>
+        <div class="metric-desc">Quand un chart est g&eacute;n&eacute;r&eacute;, il matche les donn&eacute;es. Taux de g&eacute;n&eacute;ration&nbsp;: 25% (am&eacute;liorable).</div>
+      </div>
+      <div class="metric-card quality">
+        <div class="metric-badge">QUALITY</div>
+        <div class="metric-value">5 fichiers</div>
+        <div class="metric-label">Codebase</div>
+        <div class="metric-desc">agent.py + codegen.py + sandbox.py + schema.py + insights.py. D&eacute;ploy&eacute; &agrave; $7/mois.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. LE PITCH -->
+  <div class="section">
+    <div class="section-number">9</div>
+    <h2>Le pitch interview &mdash; 45 secondes</h2>
+
+    <div class="pitch-box">
+      <p>&laquo;&nbsp;J'ai construit DataPilot, un <strong>agent AI qui analyse des donn&eacute;es CSV</strong> en langage naturel.</p>
+      <p>Le probl&egrave;me&nbsp;: les &eacute;quipes business passent 30 &agrave; 60 minutes dans Excel pour r&eacute;pondre &agrave; une seule question sur leurs donn&eacute;es. ChatGPT peut aider mais la session expire apr&egrave;s 30 minutes.</p>
+      <p>DataPilot utilise du <strong>Prompt Chaining</strong> avec un seul appel &agrave; GPT-4o. Tu poses ta question, l'agent <strong>g&eacute;n&egrave;re du code pandas</strong>, l'ex&eacute;cute dans un sandbox isol&eacute;, et retourne la r&eacute;ponse avec un graphique &mdash; en <strong>2 secondes</strong>.</p>
+      <p>L'insight cl&eacute;&nbsp;: mon premier eval a score <strong>55%</strong> avec une hallucination. Le mod&egrave;le avait invent&eacute; que le profit pouvait servir de proxy pour la satisfaction client. J'ai ajout&eacute; une <strong>r&egrave;gle anti-hallucination</strong> dans le prompt et upgrad&eacute; le mod&egrave;le. Deuxi&egrave;me round&nbsp;: <strong>87.5%</strong>, z&eacute;ro hallucination.</p>
+      <p>La le&ccedil;on&nbsp;: les tests en d&eacute;veloppement (22/22 PASS) ne garantissent pas la qualit&eacute; sur de nouvelles questions. <strong>In AI, shipping is easy. Evaluating is hard.</strong>&nbsp;&raquo;</p>
+    </div>
+  </div>
+
+  <!-- 10. CONCEPTS -->
+  <div class="section section-page-break">
+    <div class="section-number">10</div>
+    <h2>Concepts &mdash; si on te demande</h2>
+
+    <table class="concepts-table">
+      <thead><tr><th>Concept</th><th>C'est quoi</th><th>Exemple concret</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Prompt Chaining</td>
+          <td>Pattern d'agent AI o&ugrave; les &eacute;tapes sont fix&eacute;es et s&eacute;quentielles. Chaque &eacute;tape passe son r&eacute;sultat &agrave; la suivante. Plus fiable et pr&eacute;visible que ReAct o&ugrave; le LLM d&eacute;cide du chemin.</td>
+          <td>schema &rarr; codegen &rarr; sandbox &rarr; answer (toujours dans cet ordre)</td>
+        </tr>
+        <tr>
+          <td>Code generation</td>
+          <td>Au lieu de demander au LLM de r&eacute;pondre directement, on lui demande de g&eacute;n&eacute;rer du code qui calcule la r&eacute;ponse. Les chiffres viennent d'un calcul r&eacute;el, pas de la m&eacute;moire du LLM.</td>
+          <td>&laquo;&nbsp;Total sales?&nbsp;&raquo; &rarr; <code>result = f"Total: ${df['Sales'].sum():,.2f}"</code></td>
+        </tr>
+        <tr>
+          <td>Sandbox</td>
+          <td>Environnement isol&eacute; pour ex&eacute;cuter du code g&eacute;n&eacute;r&eacute; par le LLM. Si le code plante ou fait quelque chose de dangereux, le serveur principal n'est pas affect&eacute;.</td>
+          <td>Python <code>subprocess</code> avec timeout &mdash; pas <code>eval()</code></td>
+        </tr>
+        <tr>
+          <td>Anti-hallucination</td>
+          <td>R&egrave;gle dans le prompt qui force le mod&egrave;le &agrave; refuser au lieu d'inventer. &laquo;&nbsp;If the data is not in the schema, say so. NEVER invent proxies.&nbsp;&raquo; Les r&egrave;gles sp&eacute;cifiques marchent, les instructions vagues non.</td>
+          <td>&laquo;&nbsp;Satisfaction score?&nbsp;&raquo; &rarr; &laquo;&nbsp;This dataset does not contain satisfaction data&nbsp;&raquo;</td>
+        </tr>
+        <tr>
+          <td>Golden dataset</td>
+          <td>Jeu de 20 questions NOUVELLES (pas celles du d&eacute;veloppement) utilis&eacute;es pour &eacute;valuer la qualit&eacute;. Structur&eacute;es par type&nbsp;: agr&eacute;gation, tendance, comparaison, multi-&eacute;tapes, adversarial, consistance.</td>
+          <td>Les tests BUILD (22/22) ne trouvent pas les m&ecirc;mes bugs que l'eval (55%)</td>
+        </tr>
+        <tr>
+          <td>Eval Gate</td>
+          <td>Rituel de la Builder PM Method. 3 niveaux (BLOCKING / QUALITY / SIGNAL). 3 d&eacute;cisions (GO / CONDITIONAL GO / NO-GO). Un fail BLOCKING = retour obligatoire au BUILD.</td>
+          <td>Round 1&nbsp;: 1 hallucination BLOCKING &rarr; NO-GO &rarr; micro-loop &rarr; Round 2&nbsp;: CONDITIONAL GO</td>
+        </tr>
+        <tr>
+          <td>Micro-loop</td>
+          <td>Boucle BUILD &harr; EVALUATE. On fixe les probl&egrave;mes trouv&eacute;s par l'eval, puis on re-&eacute;value. On boucle jusqu'&agrave; ce que les crit&egrave;res passent.</td>
+          <td>55% &rarr; prompt fix + model upgrade &rarr; 87.5%</td>
+        </tr>
+        <tr>
+          <td>Schema text</td>
+          <td>Description textuelle de la structure du CSV&nbsp;: colonnes, types, &eacute;chantillon. C'est ce que le LLM &laquo;&nbsp;voit&nbsp;&raquo; du fichier &mdash; jamais les donn&eacute;es compl&egrave;tes.</td>
+          <td><code>Column: Sales (float64), sample: [245.5, 731.2, 14.6]</code></td>
+        </tr>
+        <tr>
+          <td>Meta-question</td>
+          <td>Question sur la m&eacute;thode (&laquo;&nbsp;comment tu as calcul&eacute; &ccedil;a?&nbsp;&raquo;), pas sur les donn&eacute;es. D&eacute;tect&eacute;e par regex Python pour &eacute;viter de modifier le prompt principal.</td>
+          <td>Regex <code>META_KEYWORDS</code> &rarr; prompt d&eacute;di&eacute; <code>META_SYSTEM</code></td>
+        </tr>
+        <tr>
+          <td>FastAPI</td>
+          <td>Framework Python pour cr&eacute;er des APIs. Tu d&eacute;finis des routes, FastAPI g&egrave;re la validation, les erreurs, et la doc auto.</td>
+          <td><code>@app.post("/analyze")</code> cr&eacute;e la route principale</td>
+        </tr>
+        <tr>
+          <td>Render</td>
+          <td>Plateforme cloud. Tu push du code sur GitHub, Render le d&eacute;tecte, l'installe et le met en ligne automatiquement.</td>
+          <td>Push sur <code>main</code> &rarr; backend live en 2 minutes</td>
+        </tr>
+        <tr>
+          <td>Lovable</td>
+          <td>Outil no-code qui g&eacute;n&egrave;re du React + Tailwind via des prompts en langage naturel.</td>
+          <td>&laquo;&nbsp;Ajoute un dataset selector avec 3 d&eacute;mos&nbsp;&raquo; &rarr; code React g&eacute;n&eacute;r&eacute;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 11. QUESTIONS TEST -->
+  <div class="section">
+    <div class="section-number">11</div>
+    <h2>Questions test &mdash; r&eacute;pondre sans regarder</h2>
+
+    <ol class="questions-list">
+      <li>Quel probl&egrave;me DataPilot r&eacute;sout qu'Excel et ChatGPT ne r&eacute;solvent pas&nbsp;?</li>
+      <li>C'est quoi le Prompt Chaining&nbsp;? Pourquoi c'est mieux que ReAct pour ce cas&nbsp;?</li>
+      <li>Pourquoi un seul appel LLM et pas deux&nbsp;? Quel &eacute;tait le design initial&nbsp;?</li>
+      <li>Explique le pipeline en 4 &eacute;tapes &agrave; quelqu'un qui conna&icirc;t les LLM</li>
+      <li>Pourquoi le LLM ne voit jamais les donn&eacute;es compl&egrave;tes&nbsp;? Quel est l'avantage&nbsp;?</li>
+      <li>C'est quoi une hallucination dans le contexte de DataPilot&nbsp;? Donne l'exemple E15.</li>
+      <li>Comment la r&egrave;gle anti-hallucination fonctionne&nbsp;? Pourquoi les instructions vagues ne marchent pas&nbsp;?</li>
+      <li>Raconte l'histoire du NO-GO en 30 secondes. 55% &rarr; 87.5%, comment&nbsp;?</li>
+      <li>Pourquoi les 22/22 micro-tests du BUILD n'ont pas pr&eacute;dit le 55% de l'eval&nbsp;?</li>
+      <li>C'est quoi &laquo;&nbsp;code d&eacute;terministe &gt; prompt probabiliste&nbsp;&raquo;&nbsp;? Donne l'exemple des m&eacute;ta-questions.</li>
+      <li>Dessine le sch&eacute;ma d'architecture&nbsp;: quels modules, quel appel API&nbsp;?</li>
+      <li>Qu'est-ce que l'Eval Gate&nbsp;? Les 3 niveaux, les 3 d&eacute;cisions&nbsp;?</li>
+      <li>Pourquoi GPT-4o et pas GPT-4o-mini&nbsp;? Donne les chiffres.</li>
+      <li>C'est quoi un sandbox&nbsp;? Pourquoi pas <code>eval()</code>&nbsp;?</li>
+      <li>&laquo;&nbsp;In AI, shipping is easy. Evaluating is hard.&nbsp;&raquo; Explique avec les donn&eacute;es de DataPilot.</li>
+    </ol>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    DataPilot &middot; Product Mastery Card &middot; The Builder PM Method &middot; Mehdi Bargach 2026
+  </div>
+
+</div>
+
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme-datapilot', next);
+    updateToggle(next);
+  }
+  function updateToggle(t) {
+    document.getElementById('theme-icon').innerHTML = t === 'dark' ? '&#9788;' : '&#9790;';
+    document.getElementById('theme-label').textContent = t === 'dark' ? 'Light' : 'Dark';
+  }
+  const saved = localStorage.getItem('theme-datapilot') || 'dark';
+  if (saved !== 'dark') document.documentElement.setAttribute('data-theme', 'light');
+  updateToggle(saved);
+</script>
+
+</body>
+</html>
