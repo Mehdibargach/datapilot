@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataPilot &mdash; Product Mastery Card</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #f5f5f7; --bg-card: #ffffff; --bg-subtle: #f0f0f2; --bg-hover: #fafafa;
+    --border: #e0e0e4; --border-light: #ebebee;
+    --text: #1d1d1f; --text-secondary: #515154; --text-muted: #86868b;
+    --accent: #1d1d1f; --accent-bg: #f0f0f2; --accent-border: #d2d2d7;
+    --callout-bg: #f5f5f7; --callout-border: #d2d2d7; --callout-text: #1d1d1f; --callout-muted: #515154;
+    --header-bg: #1d1d1f; --header-text: #f5f5f7;
+    --pitch-bg: #1d1d1f; --pitch-text: #e8e8ed; --pitch-accent: #a1a1a6;
+    --badge-blocking-bg: #1d1d1f; --badge-blocking-text: #ffffff;
+    --badge-quality-bg: #515154; --badge-quality-text: #ffffff;
+    --badge-signal-bg: #86868b; --badge-signal-text: #ffffff;
+    --step-number-bg: #1d1d1f; --step-number-text: #ffffff;
+    --step-box-bg: #1d1d1f; --step-box-text: #ffffff;
+    --toggle-bg: rgba(0,0,0,0.06); --toggle-hover: rgba(0,0,0,0.1);
+    --code-bg: #e8e8ed;
+  }
+
+  [data-theme="dark"] {
+    --bg: #0a0a0a; --bg-card: #141414; --bg-subtle: #1c1c1e; --bg-hover: #1c1c1e;
+    --border: #2c2c2e; --border-light: #232326;
+    --text: #f5f5f7; --text-secondary: #a1a1a6; --text-muted: #6e6e73;
+    --accent: #f5f5f7; --accent-bg: #1c1c1e; --accent-border: #3a3a3c;
+    --callout-bg: #1c1c1e; --callout-border: #2c2c2e; --callout-text: #f5f5f7; --callout-muted: #a1a1a6;
+    --header-bg: #141414; --header-text: #f5f5f7;
+    --pitch-bg: #1c1c1e; --pitch-text: #d1d1d6; --pitch-accent: #86868b;
+    --badge-blocking-bg: #f5f5f7; --badge-blocking-text: #0a0a0a;
+    --badge-quality-bg: #a1a1a6; --badge-quality-text: #0a0a0a;
+    --badge-signal-bg: #6e6e73; --badge-signal-text: #0a0a0a;
+    --step-number-bg: #f5f5f7; --step-number-text: #0a0a0a;
+    --step-box-bg: #f5f5f7; --step-box-text: #0a0a0a;
+    --toggle-bg: rgba(255,255,255,0.08); --toggle-hover: rgba(255,255,255,0.14);
+    --code-bg: #2c2c2e;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text); background: var(--bg); line-height: 1.65; font-size: 15px;
+    padding: 40px 20px; transition: background 0.3s, color 0.3s; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  .theme-toggle {
+    position: fixed; top: 20px; right: 24px; z-index: 100;
+    display: flex; align-items: center; gap: 8px;
+    background: var(--toggle-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px;
+    cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text-secondary); transition: background 0.2s;
+  }
+  .theme-toggle:hover { background: var(--toggle-hover); }
+  .theme-toggle .icon { font-size: 15px; line-height: 1; }
+
+  .header {
+    background: var(--header-bg); color: var(--header-text);
+    padding: 40px 44px; border-radius: 14px; margin-bottom: 28px; border: 1px solid var(--border);
+  }
+  .header-badge {
+    display: inline-block; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
+    font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 5px 12px; border-radius: 16px; margin-bottom: 14px;
+  }
+  [data-theme="dark"] .header-badge { background: rgba(255,255,255,0.06); }
+  .header h1 { font-size: 30px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.5px; }
+  .header-subtitle { font-size: 15px; color: rgba(255,255,255,0.5); font-weight: 400; }
+
+  .section {
+    background: var(--bg-card); border-radius: 12px; padding: 32px 36px;
+    margin-bottom: 20px; border: 1px solid var(--border); transition: background 0.3s, border-color 0.3s;
+  }
+  .section-number {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; background: var(--step-number-bg); color: var(--step-number-text);
+    font-size: 13px; font-weight: 700; border-radius: 7px; margin-bottom: 12px; transition: background 0.3s, color 0.3s;
+  }
+  .section h2 { font-size: 21px; font-weight: 700; color: var(--text); margin-bottom: 18px; letter-spacing: -0.3px; }
+  .section p { margin-bottom: 14px; color: var(--text-secondary); }
+
+  .one-liner {
+    background: var(--accent-bg); border-left: 3px solid var(--accent);
+    padding: 22px 26px; border-radius: 0 10px 10px 0; margin-bottom: 20px; transition: background 0.3s, border-color 0.3s;
+  }
+  .one-liner p { font-size: 17px; font-weight: 500; color: var(--text); margin: 0; line-height: 1.5; }
+
+  table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    margin: 14px 0; font-size: 14px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);
+  }
+  thead th {
+    background: var(--bg-subtle); color: var(--text-muted); font-weight: 600; text-align: left;
+    padding: 10px 14px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border);
+  }
+  tbody td { padding: 12px 14px; border-bottom: 1px solid var(--border-light); vertical-align: top; color: var(--text-secondary); }
+  tbody tr:last-child td { border-bottom: none; }
+  .problem-table td:first-child { font-weight: 600; color: var(--text); white-space: nowrap; width: 200px; }
+
+  .pipeline-flow { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 26px 0; flex-wrap: wrap; }
+  .pipeline-step { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .pipeline-step .step-box {
+    background: var(--step-box-bg); color: var(--step-box-text);
+    font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 8px; letter-spacing: 0.5px; transition: background 0.3s, color 0.3s;
+  }
+  .pipeline-step .step-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+  .pipeline-arrow { color: var(--text-muted); font-size: 18px; margin-top: -16px; }
+
+  .step-detail { border: 1px solid var(--border); border-radius: 10px; margin: 18px 0; overflow: hidden; transition: border-color 0.3s; }
+  .step-detail-header {
+    display: flex; align-items: center; gap: 10px; padding: 14px 18px;
+    background: var(--bg-subtle); border-bottom: 1px solid var(--border); transition: background 0.3s;
+  }
+  .step-detail-number {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; background: var(--step-number-bg); color: var(--step-number-text);
+    font-size: 12px; font-weight: 700; border-radius: 6px; flex-shrink: 0; transition: background 0.3s, color 0.3s;
+  }
+  .step-detail-title { font-weight: 700; font-size: 14px; color: var(--text); }
+  .step-detail-title span { font-weight: 400; color: var(--text-muted); margin-left: 6px; }
+  .step-detail-body { padding: 18px; }
+  .step-detail-body .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .col-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--text-muted); }
+  .col-what p, .col-why p { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; }
+
+  .callout, .deep-dive, .key-insight {
+    background: var(--callout-bg); border: 1px solid var(--callout-border);
+    border-radius: 8px; padding: 16px 18px; margin: 14px 0; transition: background 0.3s, border-color 0.3s;
+  }
+  .callout-title, .deep-dive-title {
+    font-size: 12px; font-weight: 700; color: var(--text-muted);
+    margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.6px;
+  }
+  .callout p, .deep-dive p, .key-insight p { font-size: 14px; color: var(--callout-muted); margin-bottom: 8px; }
+  .callout p:last-child, .deep-dive p:last-child, .key-insight p:last-child { margin-bottom: 0; }
+  .key-insight { border-left: 3px solid var(--text-muted); border-radius: 0 8px 8px 0; }
+  code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-size: 13px; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; transition: background 0.3s; }
+
+  .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0; }
+  .metric-card {
+    border-radius: 10px; padding: 18px; text-align: center;
+    border: 1px solid var(--border); background: var(--bg-subtle); transition: background 0.3s, border-color 0.3s;
+  }
+  .metric-badge {
+    display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; padding: 3px 10px; border-radius: 10px; margin-bottom: 10px;
+  }
+  .blocking .metric-badge { background: var(--badge-blocking-bg); color: var(--badge-blocking-text); }
+  .quality .metric-badge { background: var(--badge-quality-bg); color: var(--badge-quality-text); }
+  .signal .metric-badge { background: var(--badge-signal-bg); color: var(--badge-signal-text); }
+  .metric-value { font-size: 30px; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; color: var(--text); }
+  .metric-label { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .metric-desc { font-size: 11px; color: var(--text-muted); line-height: 1.45; }
+
+  .severity-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; }
+  .severity-tag.blocking { background: var(--badge-blocking-bg); color: var(--badge-blocking-text); }
+  .severity-tag.quality { background: var(--badge-quality-bg); color: var(--badge-quality-text); }
+  .severity-tag.signal { background: var(--badge-signal-bg); color: var(--badge-signal-text); }
+
+  .pitch-box {
+    background: var(--pitch-bg); color: var(--pitch-text); border-radius: 10px;
+    padding: 28px 32px; margin: 18px 0; line-height: 1.7; font-size: 14px;
+    border: 1px solid var(--border); transition: background 0.3s, border-color 0.3s;
+  }
+  .pitch-box p { color: var(--pitch-text); margin-bottom: 12px; }
+  .pitch-box p:last-child { margin-bottom: 0; }
+  .pitch-box strong { color: var(--pitch-accent); }
+  [data-theme="dark"] .pitch-box strong { color: #f5f5f7; }
+
+  .concepts-table td:first-child { font-weight: 700; color: var(--text); width: 190px; }
+  .concepts-table td:nth-child(3) { color: var(--text-muted); font-style: italic; font-size: 13px; }
+
+  .questions-list { list-style: none; counter-reset: question; }
+  .questions-list li {
+    counter-increment: question; padding: 12px 14px 12px 48px; position: relative;
+    border-bottom: 1px solid var(--border-light); color: var(--text-secondary); font-size: 14px;
+  }
+  .questions-list li:last-child { border-bottom: none; }
+  .questions-list li::before {
+    content: counter(question, decimal-leading-zero); position: absolute; left: 14px; top: 12px;
+    font-size: 13px; font-weight: 800; color: var(--text-muted);
+  }
+
+  .archi-diagram {
+    background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 10px;
+    padding: 24px; margin: 18px 0; overflow-x: auto; transition: background 0.3s, border-color 0.3s;
+  }
+  .archi-diagram pre {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 12px; line-height: 1.5; color: var(--text-secondary); margin: 0; white-space: pre;
+  }
+
+  .footer { text-align: center; padding: 20px 0 12px; color: var(--text-muted); font-size: 12px; }
+  strong { font-weight: 700; }
+
+  @media print {
+    body { background: white !important; color: #1d1d1f !important; padding: 0; font-size: 12px; }
+    .theme-toggle { display: none !important; }
+    .container { max-width: 100%; }
+    .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; margin-bottom: 16px; padding: 24px 28px; }
+    .section {
+      box-shadow: none; border: 1px solid #d2d2d7; padding: 20px 24px;
+      margin-bottom: 14px; page-break-inside: avoid; background: white !important;
+    }
+    .step-detail { page-break-inside: avoid; }
+    .metric-card, .callout, .deep-dive, .key-insight, .pitch-box,
+    .pipeline-step .step-box, .section-number, .step-detail-number,
+    .metric-badge, .severity-tag, .archi-diagram {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .section-page-break { page-break-before: always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="theme-toggle" onclick="toggleTheme()">
+  <span class="icon" id="theme-icon">&#9788;</span>
+  <span id="theme-label">Light</span>
+</div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-badge">Product Mastery Card</div>
+    <h1>DataPilot</h1>
+    <div class="header-subtitle">Mehdi Bargach &middot; 2026</div>
+  </div>
+
+  <!-- EN 1 PHRASE -->
+  <div class="one-liner">
+    <p>Tu d&eacute;poses un fichier de donn&eacute;es, tu poses ta question en fran&ccedil;ais ou en anglais, et tu re&ccedil;ois la r&eacute;ponse avec un graphique &mdash; en 2 secondes. Pas de formules, pas de code, pas d'attente.</p>
+  </div>
+
+  <!-- 1. LE PROBLÈME -->
+  <div class="section">
+    <div class="section-number">1</div>
+    <h2>Le probl&egrave;me</h2>
+    <p><strong>Situation&nbsp;:</strong> tu as un fichier CSV (export Shopify, Google Ads, Stripe, CRM...) et tu veux savoir quelque chose.</p>
+    <table class="problem-table">
+      <thead><tr><th>Option</th><th>Ce qui se passe</th><th>Pourquoi c'est cass&eacute;</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Excel / Google Sheets</td>
+          <td>Tableaux crois&eacute;s, formules VLOOKUP, graphiques manuels</td>
+          <td><strong>30-60 minutes</strong> pour r&eacute;pondre &agrave; UNE question. Chaque semaine. Et tu dois savoir ce que tu cherches.</td>
+        </tr>
+        <tr>
+          <td>ChatGPT Code Interpreter</td>
+          <td>Upload le CSV, pose une question, obtiens une r&eacute;ponse</td>
+          <td><strong>Couteau suisse</strong>&nbsp;: il fait tout (texte, image, code, donn&eacute;es) donc rien de sp&eacute;cialement bien pour les donn&eacute;es. Session qui expire, fichiers qui disparaissent, pas d'insights automatiques. DataPilot est un outil <strong>d&eacute;di&eacute; &agrave; l'analyse</strong>&nbsp;: il conna&icirc;t la structure de tes donn&eacute;es, g&eacute;n&egrave;re un graphique adapt&eacute;, et te signale les anomalies &mdash; sans que tu le demandes.</td>
+        </tr>
+        <tr>
+          <td>Tableau / Power BI / Looker</td>
+          <td>Dashboards interactifs, puissants</td>
+          <td>Faits pour les <strong>&eacute;quipes data</strong>. Un marketing manager ne va pas apprendre SQL pour savoir quel canal baisse.</td>
+        </tr>
+        <tr>
+          <td>Ne rien faire</td>
+          <td>Prendre des d&eacute;cisions au feeling</td>
+          <td>Personne ne cherche ce que tu n'as <strong>pas demand&eacute;</strong>. Les insights cach&eacute;s restent cach&eacute;s.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><strong>Le vrai besoin&nbsp;:</strong> poser une question en fran&ccedil;ais ou en anglais &agrave; tes donn&eacute;es, et recevoir la r&eacute;ponse avec un graphique &mdash; sans code, sans config, sans attente.</p>
+  </div>
+
+  <!-- 2. L'ARCHITECTURE — LES DEUX PATTERNS D'AGENTS AI -->
+  <div class="section">
+    <div class="section-number">2</div>
+    <h2>L'architecture &mdash; les 2 patterns d'agents AI</h2>
+
+    <p>Quand on construit un <strong>agent AI</strong> (un programme qui ex&eacute;cute plusieurs &eacute;tapes pour r&eacute;pondre &agrave; une demande), il y a deux grandes architectures possibles. Comprendre les deux est essentiel pour justifier le choix de l'une ou l'autre.</p>
+
+    <!-- PROMPT CHAINING -->
+    <h3 style="font-size: 16px; margin: 24px 0 14px; color: var(--text);">Pattern 1 &mdash; Cha&icirc;nage d'&eacute;tapes (Prompt Chaining)</h3>
+
+    <p><strong>L'analogie&nbsp;:</strong> une cha&icirc;ne de montage en usine. Chaque poste fait <strong>un seul job</strong> et passe le r&eacute;sultat au poste suivant. L'ordre est fix&eacute; &agrave; l'avance, il ne change jamais.</p>
+
+    <p><strong>Comment &ccedil;a marche techniquement&nbsp;:</strong></p>
+    <p>Le d&eacute;veloppeur d&eacute;finit une s&eacute;quence d'&eacute;tapes dans le code. Chaque &eacute;tape re&ccedil;oit le r&eacute;sultat de la pr&eacute;c&eacute;dente et produit un r&eacute;sultat pour la suivante. L'AI intervient &agrave; <strong>une ou plusieurs &eacute;tapes pr&eacute;cises</strong> (par exemple, g&eacute;n&eacute;rer du code), mais c'est le code du d&eacute;veloppeur qui orchestre le flux, pas l'AI.</p>
+
+    <div class="callout">
+      <div class="callout-title">DataPilot en cha&icirc;nage &mdash; 4 &eacute;tapes</div>
+      <p><strong>schema.py</strong> (lire le fichier) &rarr; <strong>codegen.py</strong> (l'AI &eacute;crit le calcul &mdash; seul appel AI) &rarr; <strong>sandbox.py</strong> (ex&eacute;cuter le calcul) &rarr; <strong>agent.py</strong> (assembler la r&eacute;ponse). Toujours dans cet ordre. 2 secondes. Chaque &eacute;tape est un module ind&eacute;pendant &mdash; si &ccedil;a casse, on sait exactement o&ugrave;.</p>
+    </div>
+
+    <table>
+      <thead><tr><th>Forces</th><th>Limites</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>&bull; <strong>Pr&eacute;visible</strong>&nbsp;: m&ecirc;me chemin, m&ecirc;me dur&eacute;e, &agrave; chaque fois</p>
+            <p>&bull; <strong>D&eacute;buggable</strong>&nbsp;: si &ccedil;a rate, tu sais &agrave; quelle &eacute;tape</p>
+            <p>&bull; <strong>Testable</strong>&nbsp;: chaque module peut &ecirc;tre test&eacute; isol&eacute;ment</p>
+            <p>&bull; <strong>Co&ucirc;t ma&icirc;tris&eacute;</strong>&nbsp;: nombre fixe d'appels &agrave; l'AI</p>
+          </td>
+          <td>
+            <p>&bull; <strong>Rigide</strong>&nbsp;: si la t&acirc;che demande un chemin diff&eacute;rent, le pipeline ne peut pas s'adapter</p>
+            <p>&bull; <strong>Pas d'exploration</strong>&nbsp;: l'AI ne peut pas d&eacute;cider &laquo;&nbsp;je vais v&eacute;rifier quelque chose en plus&nbsp;&raquo;</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong>Cas d'usage id&eacute;al&nbsp;:</strong> t&acirc;che r&eacute;p&eacute;titive avec un chemin connu &agrave; l'avance. Analyse de donn&eacute;es, traitement de documents, pipelines RAG (question-r&eacute;ponse sur documents).</p>
+
+    <!-- REACT -->
+    <h3 style="font-size: 16px; margin: 24px 0 14px; color: var(--text);">Pattern 2 &mdash; Agent autonome (ReAct)</h3>
+
+    <p><strong>L'analogie&nbsp;:</strong> un chef qui improvise. Il go&ucirc;te, r&eacute;fl&eacute;chit, d&eacute;cide quoi faire ensuite. Parfois brillant, parfois 30 minutes pour un plat de 5 minutes.</p>
+
+    <p><strong>Le nom technique&nbsp;:</strong> <strong>ReAct</strong> = <strong>Re</strong>ason + <strong>Act</strong> (r&eacute;fl&eacute;chir + agir). Rien &agrave; voir avec React le framework front-end &mdash; m&ecirc;me nom, concepts compl&egrave;tement diff&eacute;rents.</p>
+
+    <p><strong>Comment &ccedil;a marche techniquement&nbsp;:</strong></p>
+    <p>L'AI re&ccedil;oit la question de l'utilisateur + une <strong>liste d'outils</strong> &agrave; sa disposition (lire un fichier, ex&eacute;cuter du code, appeler une API, chercher sur le web...). Ensuite, elle boucle toute seule en 3 temps&nbsp;:</p>
+
+    <table>
+      <thead><tr><th>&Eacute;tape</th><th>Ce qui se passe</th><th>Exemple concret</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Reason</strong> (r&eacute;fl&eacute;chir)</td>
+          <td>L'AI analyse la situation et d&eacute;cide quelle action prendre</td>
+          <td>&laquo;&nbsp;Pour r&eacute;pondre &agrave; cette question sur les ventes, je dois d'abord comprendre la structure du fichier&nbsp;&raquo;</td>
+        </tr>
+        <tr>
+          <td><strong>2. Act</strong> (agir)</td>
+          <td>L'AI choisit un outil dans sa liste et l'utilise</td>
+          <td>Appelle l'outil &laquo;&nbsp;lire le sch&eacute;ma du fichier&nbsp;&raquo;</td>
+        </tr>
+        <tr>
+          <td><strong>3. Observe</strong> (observer)</td>
+          <td>L'AI regarde le r&eacute;sultat et d&eacute;cide si elle a la r&eacute;ponse ou si elle doit faire un tour de plus</td>
+          <td>&laquo;&nbsp;OK, je vois les colonnes. Maintenant je vais &eacute;crire un calcul pour les ventes par r&eacute;gion&nbsp;&raquo; &rarr; retour &agrave; l'&eacute;tape 1</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Cette boucle <strong>Reason &rarr; Act &rarr; Observe</strong> se r&eacute;p&egrave;te jusqu'&agrave; ce que l'AI d&eacute;cide qu'elle a assez d'information pour r&eacute;pondre. Le nombre de tours est <strong>variable</strong> &mdash; 3 tours pour une question simple, 10+ pour une question complexe.</p>
+
+    <table>
+      <thead><tr><th>Forces</th><th>Limites</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>&bull; <strong>Flexible</strong>&nbsp;: s'adapte &agrave; n'importe quelle question, m&ecirc;me impr&eacute;vue</p>
+            <p>&bull; <strong>Exploratoire</strong>&nbsp;: l'AI peut d&eacute;cider de v&eacute;rifier un r&eacute;sultat, chercher plus loin, changer d'approche</p>
+            <p>&bull; <strong>Multi-outils</strong>&nbsp;: peut combiner web, code, API, fichiers dans un seul flux</p>
+          </td>
+          <td>
+            <p>&bull; <strong>Impr&eacute;visible</strong>&nbsp;: la latence peut varier de 2s &agrave; 60s+ selon le chemin choisi</p>
+            <p>&bull; <strong>Co&ucirc;teux</strong>&nbsp;: chaque tour = un appel AI suppl&eacute;mentaire (co&ucirc;t et temps)</p>
+            <p>&bull; <strong>Dur &agrave; d&eacute;bugger</strong>&nbsp;: il faut relire tout le &laquo;&nbsp;raisonnement&nbsp;&raquo; pour comprendre o&ugrave; &ccedil;a a d&eacute;raill&eacute;</p>
+            <p>&bull; <strong>Risque de boucle</strong>&nbsp;: l'AI peut tourner en rond si elle ne trouve pas la r&eacute;ponse</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong>Cas d'usage id&eacute;al&nbsp;:</strong> t&acirc;che exploratoire avec un chemin inconnu &agrave; l'avance. Recherche web multi-sources, audit de site (crawler + analyser + synth&eacute;tiser), assistant de code qui doit comprendre un projet entier.</p>
+
+    <!-- COMPARAISON -->
+    <h3 style="font-size: 16px; margin: 24px 0 14px; color: var(--text);">Comparaison directe</h3>
+
+    <table>
+      <thead><tr><th></th><th>Cha&icirc;nage (Prompt Chaining)</th><th>Agent autonome (ReAct)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Qui d&eacute;cide du chemin</strong></td><td>Le d&eacute;veloppeur (cod&eacute; en dur)</td><td>L'AI (d&eacute;cide &agrave; chaque tour)</td></tr>
+        <tr><td><strong>Nombre d'&eacute;tapes</strong></td><td>Fixe (4 pour DataPilot)</td><td>Variable (3 &agrave; 15+)</td></tr>
+        <tr><td><strong>Nombre d'appels AI</strong></td><td>Fixe (1 pour DataPilot)</td><td>Variable (1 par tour de boucle)</td></tr>
+        <tr><td><strong>Latence</strong></td><td>Pr&eacute;visible (~2s)</td><td>Impr&eacute;visible (2s &agrave; 60s+)</td></tr>
+        <tr><td><strong>D&eacute;buggabilit&eacute;</strong></td><td>Facile &mdash; tu sais o&ugrave; &ccedil;a a cass&eacute;</td><td>Dur &mdash; il faut relire le raisonnement</td></tr>
+        <tr><td><strong>Co&ucirc;t par requ&ecirc;te</strong></td><td>Pr&eacute;visible et bas</td><td>Variable et potentiellement &eacute;lev&eacute;</td></tr>
+        <tr><td><strong>Quand l'utiliser</strong></td><td>Chemin connu, t&acirc;che r&eacute;p&eacute;titive</td><td>Chemin inconnu, t&acirc;che exploratoire</td></tr>
+      </tbody>
+    </table>
+
+    <!-- POURQUOI PROMPT CHAINING POUR DATAPILOT -->
+    <div class="callout">
+      <div class="callout-title">Pourquoi le cha&icirc;nage pour DataPilot</div>
+      <p>Analyser des donn&eacute;es suit <strong>toujours le m&ecirc;me chemin</strong>&nbsp;: comprendre le fichier &rarr; &eacute;crire le calcul &rarr; ex&eacute;cuter &rarr; r&eacute;pondre. Le chemin est connu &agrave; l'avance, la t&acirc;che est r&eacute;p&eacute;titive. Laisser l'AI d&eacute;cider du chemin = complexit&eacute; et impr&eacute;visibilit&eacute; pour <strong>z&eacute;ro gain</strong>.</p>
+      <p><strong>Preuve par le n&eacute;gatif&nbsp;:</strong> LeakFinder, un autre side project, utilisait un agent ReAct en 9 &eacute;tapes pour auditer des sites web. La latence variait de 2 secondes &agrave; 22 minutes selon les sites. L'impr&eacute;visibilit&eacute; a tu&eacute; le projet &mdash; NO-GO pour risque d&eacute;mo trop &eacute;lev&eacute;.</p>
+    </div>
+
+    <div class="key-insight">
+      <p><strong>R&egrave;gle de d&eacute;cision&nbsp;:</strong> si tu peux dessiner le chemin &agrave; l'avance &rarr; cha&icirc;nage. Si chaque question peut n&eacute;cessiter un chemin diff&eacute;rent &rarr; agent autonome. La question n'est pas &laquo;&nbsp;quel pattern est meilleur&nbsp;&raquo; mais &laquo;&nbsp;quel pattern correspond &agrave; ta t&acirc;che&nbsp;&raquo;.</p>
+    </div>
+  </div>
+
+  <!-- 3. LE STACK COMPLET -->
+  <div class="section">
+    <div class="section-number">3</div>
+    <h2>Le stack complet</h2>
+
+    <table>
+      <thead><tr><th>Couche</th><th>Techno</th><th>C'est quoi</th><th>Pourquoi ce choix</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Frontend</strong></td>
+          <td>React + Tailwind (Lovable)</td>
+          <td>L'interface&nbsp;: chat, upload CSV, s&eacute;lecteur de datasets, affichage r&eacute;ponse + chart</td>
+          <td>Lovable = outil no-code qui g&eacute;n&egrave;re du React via des prompts. M&ecirc;me stack que DocuQuery et WatchNext.</td>
+        </tr>
+        <tr>
+          <td><strong>Backend</strong></td>
+          <td>FastAPI (Python)</td>
+          <td>Le serveur qui orchestre le pipeline&nbsp;: question &rarr; code &rarr; ex&eacute;cution &rarr; r&eacute;ponse</td>
+          <td>M&ecirc;me framework que les 2 projets pr&eacute;c&eacute;dents. 1 seul endpoint m&eacute;tier (<code>/analyze</code>).</td>
+        </tr>
+        <tr>
+          <td><strong>H&eacute;bergement</strong></td>
+          <td>Render ($7/mois)</td>
+          <td>Le service cloud qui fait tourner le backend 24/7</td>
+          <td>D&eacute;ploiement auto &agrave; chaque push GitHub. M&ecirc;me infra que DocuQuery et WatchNext.</td>
+        </tr>
+        <tr>
+          <td><strong>Mod&egrave;le AI</strong></td>
+          <td>GPT-4o (OpenAI)</td>
+          <td>Re&ccedil;oit la question + la structure du fichier, et &eacute;crit les instructions de calcul</td>
+          <td>Version mini test&eacute;e d'abord (55% de pr&eacute;cision). La version compl&egrave;te&nbsp;: 87.5%, z&eacute;ro hallucination. La qualit&eacute; du mod&egrave;le a &eacute;t&eacute; d&eacute;cisive.</td>
+        </tr>
+        <tr>
+          <td><strong>Ex&eacute;cution</strong></td>
+          <td>Calcul isol&eacute;</td>
+          <td>Les instructions de calcul g&eacute;n&eacute;r&eacute;es par l'AI sont ex&eacute;cut&eacute;es dans un espace s&eacute;par&eacute; (comme un brouillon que tu jettes apr&egrave;s). Si le calcul plante, le reste de l'application n'est pas touch&eacute;.</td>
+          <td>S&eacute;curit&eacute;&nbsp;: le calcul tourne dans son coin, isol&eacute; du serveur principal.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4. SCHÉMA D'ARCHITECTURE -->
+  <div class="section">
+    <div class="section-number">4</div>
+    <h2>Le sch&eacute;ma d'architecture</h2>
+
+    <div class="archi-diagram">
+      <pre>&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;        &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+&#9474;                  &#9474; HTTPS  &#9474;           FASTAPI (Render)          &#9474;
+&#9474;  FRONTEND        &#9474;&#9472;&#9472;&#9472;&#9472;&#9472;&#9654;&#9474;                                    &#9474;
+&#9474;  React/Tailwind  &#9474;       &#9474;  POST /analyze                      &#9474;
+&#9474;  (Lovable)       &#9474;&#9668;&#9472;&#9472;&#9472;&#9472;&#9472;&#9474;    &#9474;                               &#9474;
+&#9474;                  &#9474; JSON  &#9474;    &#9500;&#9472;&#9472; schema.py &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508; CSV file
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;        &#9474;    &#9474;                          &#9474;
+                             &#9474;    &#9500;&#9472;&#9472; codegen.py &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;&#9472;&#9472;&#9472;&#9654; OpenAI API
+                             &#9474;    &#9474;                          &#9474;     (GPT-4o)
+                             &#9474;    &#9500;&#9472;&#9472; sandbox.py &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508; calcul isol&eacute;
+                             &#9474;    &#9474;                          &#9474;  (espace s&eacute;par&eacute;)
+                             &#9474;    &#9500;&#9472;&#9472; insights.py &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508; proactive scan
+                             &#9474;    &#9474;                          &#9474;
+                             &#9474;    &#9660;                          &#9474;
+                             &#9474;  JSON: answer + chart (base64)     &#9474;
+                             &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</pre>
+    </div>
+
+    <p><strong>Le flux&nbsp;:</strong> l'interface envoie une question + un fichier de donn&eacute;es. Le serveur orchestre 4 &eacute;tapes dans l'ordre (structure &rarr; calcul &rarr; ex&eacute;cution &rarr; r&eacute;ponse) et retourne le r&eacute;sultat + le graphique. <strong>1 seul appel &agrave; l'AI</strong> par question.</p>
+  </div>
+
+  <!-- 5. LE PIPELINE -->
+  <div class="section section-page-break">
+    <div class="section-number">5</div>
+    <h2>Le pipeline &mdash; 4 &eacute;tapes</h2>
+
+    <p>Le pipeline fonctionne comme une cha&icirc;ne de montage&nbsp;: chaque &eacute;tape fait <strong>un seul job</strong>, puis passe le r&eacute;sultat &agrave; la suivante. 4 &eacute;tapes, toujours dans le m&ecirc;me ordre.</p>
+
+    <div class="pipeline-flow">
+      <div class="pipeline-step"><div class="step-box">SCHEMA</div><div class="step-label">CSV &rarr; structure</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step"><div class="step-box">CODEGEN</div><div class="step-label">question &rarr; code</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step"><div class="step-box">SANDBOX</div><div class="step-label">code &rarr; r&eacute;sultat</div></div>
+      <div class="pipeline-arrow">&rarr;</div>
+      <div class="pipeline-step"><div class="step-box">ANSWER</div><div class="step-label">r&eacute;ponse + chart</div></div>
+    </div>
+
+    <!-- SCHEMA -->
+    <div class="step-detail">
+      <div class="step-detail-header">
+        <div class="step-detail-number">1</div>
+        <div class="step-detail-title">SCHEMA <span>CSV &rarr; structure &middot; schema.py</span></div>
+      </div>
+      <div class="step-detail-body">
+        <div class="two-col">
+          <div class="col-what">
+            <div class="col-label">Ce qui se passe</div>
+            <p>Le fichier CSV est lu avec <strong>d&eacute;tection automatique</strong> de l'encodage (UTF-8, Latin-1, etc.) et du s&eacute;parateur (virgule, point-virgule, tabulation). Le module extrait les noms de colonnes, les types de donn&eacute;es, et un &eacute;chantillon des premi&egrave;res lignes.</p>
+          </div>
+          <div class="col-why">
+            <div class="col-label">Pourquoi on fait &ccedil;a</div>
+            <p>L'AI a besoin de <strong>comprendre la structure</strong> du fichier avant de pouvoir &eacute;crire le calcul. C'est comme donner le sommaire d'un livre avant de poser des questions dessus &mdash; sans le sommaire, l'AI devinerait.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CODEGEN -->
+    <div class="step-detail">
+      <div class="step-detail-header">
+        <div class="step-detail-number">2</div>
+        <div class="step-detail-title">CODEGEN <span>question &rarr; instructions de calcul</span></div>
+      </div>
+      <div class="step-detail-body">
+        <div class="two-col">
+          <div class="col-what">
+            <div class="col-label">Ce qui se passe</div>
+            <p>La structure du fichier + la question de l'utilisateur sont envoy&eacute;es &agrave; <strong>GPT-4o</strong>. Le mod&egrave;le &eacute;crit des <strong>instructions de calcul</strong> (du code) qui r&eacute;pondent &agrave; la question. Il d&eacute;cide aussi si un graphique est pertinent, et si oui, &eacute;crit les instructions pour le g&eacute;n&eacute;rer.</p>
+          </div>
+          <div class="col-why">
+            <div class="col-label">Pourquoi on fait &ccedil;a</div>
+            <p>C'est <strong>l'astuce cl&eacute; du projet</strong>. Au lieu de demander &agrave; l'AI de r&eacute;pondre directement (&laquo;&nbsp;le total est 2 millions&nbsp;&raquo;), on lui demande d'<strong>&eacute;crire la formule de calcul</strong>. Cette formule est ensuite ex&eacute;cut&eacute;e sur les vraies donn&eacute;es. R&eacute;sultat&nbsp;: les chiffres viennent d'un calcul r&eacute;el, pas de la m&eacute;moire de l'AI. Z&eacute;ro hallucination sur les nombres.</p>
+          </div>
+        </div>
+
+        <div class="key-insight">
+          <p><strong>Insight cl&eacute;&nbsp;:</strong> l'AI ne voit <strong>jamais les donn&eacute;es compl&egrave;tes</strong>. Elle ne voit que le sommaire du fichier (noms des colonnes, types, quelques exemples). C'est le calcul g&eacute;n&eacute;r&eacute; qui touche les vraies donn&eacute;es. C'est pour &ccedil;a que les chiffres ne peuvent pas &ecirc;tre invent&eacute;s &mdash; ils viennent d'un calcul r&eacute;el, pas de la m&eacute;moire de l'AI.</p>
+        </div>
+
+        <div class="deep-dive">
+          <div class="deep-dive-title">R&egrave;gle anti-hallucination</div>
+          <p>Les instructions donn&eacute;es &agrave; l'AI contiennent cette r&egrave;gle pr&eacute;cise&nbsp;: &laquo;&nbsp;Si la donn&eacute;e demand&eacute;e n'existe pas dans le fichier, dis-le clairement. N'invente JAMAIS de substitut.&nbsp;&raquo;</p>
+          <p><strong>Exemple&nbsp;:</strong> &laquo;&nbsp;Score de satisfaction client ?&nbsp;&raquo; sur un fichier sans colonne satisfaction &rarr; l'AI r&eacute;pond &laquo;&nbsp;Ce fichier ne contient pas de donn&eacute;e sur la satisfaction&nbsp;&raquo; au lieu d'inventer un substitut (comme utiliser le profit comme approximation).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SANDBOX -->
+    <div class="step-detail">
+      <div class="step-detail-header">
+        <div class="step-detail-number">3</div>
+        <div class="step-detail-title">SANDBOX <span>instructions &rarr; r&eacute;sultat</span></div>
+      </div>
+      <div class="step-detail-body">
+        <div class="two-col">
+          <div class="col-what">
+            <div class="col-label">Ce qui se passe</div>
+            <p>Les instructions de calcul g&eacute;n&eacute;r&eacute;es &agrave; l'&eacute;tape 2 sont ex&eacute;cut&eacute;es dans un <strong>espace isol&eacute;</strong> (un &laquo;&nbsp;sandbox&nbsp;&raquo; &mdash; comme une salle d'examen o&ugrave; le code tourne seul, s&eacute;par&eacute; du reste du syst&egrave;me). Le fichier de donn&eacute;es est charg&eacute; dans cet espace, le calcul tourne, et le r&eacute;sultat sort.</p>
+          </div>
+          <div class="col-why">
+            <div class="col-label">Pourquoi on fait &ccedil;a</div>
+            <p><strong>S&eacute;curit&eacute;&nbsp;:</strong> le code tourne dans un processus s&eacute;par&eacute;. Si le calcul plante ou fait quelque chose d'inattendu, le serveur principal n'est pas touch&eacute;.</p>
+            <p><strong>Auto-correction&nbsp;:</strong> si le calcul &eacute;choue, l'erreur est renvoy&eacute;e &agrave; l'AI qui g&eacute;n&egrave;re une version corrig&eacute;e. Maximum 2 tentatives.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANSWER -->
+    <div class="step-detail">
+      <div class="step-detail-header">
+        <div class="step-detail-number">4</div>
+        <div class="step-detail-title">ANSWER <span>r&eacute;ponse + chart &middot; agent.py</span></div>
+      </div>
+      <div class="step-detail-body">
+        <div class="two-col">
+          <div class="col-what">
+            <div class="col-label">Ce qui se passe</div>
+            <p>L'orchestrateur (<code>agent.py</code>) r&eacute;cup&egrave;re le <code>result</code> (texte) et le chart (PNG sauv&eacute; sur disque). Il assemble la r&eacute;ponse finale avec les timings et optionnellement des <strong>insights proactifs</strong> (anomalies, tendances d&eacute;tect&eacute;es automatiquement).</p>
+          </div>
+          <div class="col-why">
+            <div class="col-label">Pourquoi on fait &ccedil;a</div>
+            <p>Les insights proactifs r&eacute;pondent aux questions que l'utilisateur n'a <strong>pas pos&eacute;es</strong>. C'est la diff&eacute;rence entre un outil qui attend tes questions et un analyste qui dit &laquo;&nbsp;hey, j'ai remarqu&eacute; un truc bizarre dans tes donn&eacute;es&nbsp;&raquo;.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. DETECTION META-QUESTIONS -->
+  <div class="section">
+    <div class="section-number">6</div>
+    <h2>La d&eacute;tection des m&eacute;ta-questions</h2>
+
+    <p>Quand l'utilisateur demande &laquo;&nbsp;comment tu as calcul&eacute; &ccedil;a&nbsp;?&nbsp;&raquo;, l'agent ne doit pas recalculer &mdash; il doit <strong>expliquer sa m&eacute;thode</strong>.</p>
+
+    <table>
+      <thead><tr><th>Approche</th><th>Fiabilit&eacute;</th><th>Risque</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Demander &agrave; l'AI de d&eacute;tecter</strong></td>
+          <td>~70%</td>
+          <td>L'AI ignore l'instruction 1 fois sur 3. Pire&nbsp;: ajouter cette instruction dans le prompt principal cause des <strong>effets de bord</strong> sur toutes les autres questions.</td>
+        </tr>
+        <tr>
+          <td><strong>D&eacute;tection par le code</strong></td>
+          <td>~100%</td>
+          <td>Le code v&eacute;rifie si la question contient des mots-cl&eacute;s comme &laquo;&nbsp;comment&nbsp;&raquo;, &laquo;&nbsp;pourquoi&nbsp;&raquo;, &laquo;&nbsp;explain&nbsp;&raquo;. C'est binaire (oui ou non), pas &laquo;&nbsp;peut-&ecirc;tre&nbsp;&raquo;. Z&eacute;ro impact sur le reste du syst&egrave;me.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="key-insight">
+      <p><strong>Principe g&eacute;n&eacute;ral&nbsp;:</strong> quand une d&eacute;cision est <strong>oui/non</strong>, le code classique est plus fiable que l'AI. Quand une d&eacute;cision demande de la <strong>compr&eacute;hension</strong> (comprendre une question, &eacute;crire un calcul), l'AI est meilleure. DataPilot utilise chaque outil l&agrave; o&ugrave; il excelle&nbsp;: le code pour le tri (m&eacute;ta-question ou pas), l'AI pour l'analyse.</p>
+    </div>
+  </div>
+
+  <!-- 7. L'HISTOIRE DU NO-GO -->
+  <div class="section section-page-break">
+    <div class="section-number">7</div>
+    <h2>L'histoire du NO-GO &mdash; le micro-loop</h2>
+
+    <p>Le premier round d'&eacute;valuation a donn&eacute; un <strong>NO-GO</strong> &agrave; 55%. Le deuxi&egrave;me round, apr&egrave;s 2 fixes, a donn&eacute; un <strong>CONDITIONAL GO</strong> &agrave; 87.5%.</p>
+
+    <table>
+      <thead><tr><th>M&eacute;trique</th><th>Round 1 (GPT-4o-mini)</th><th>Round 2 (GPT-4o)</th><th>Delta</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Score global</strong></td><td>55%</td><td><strong>87.5%</strong></td><td>+32.5pp</td></tr>
+        <tr><td><strong>Hallucinations</strong></td><td>1 (BLOCKING)</td><td><strong>0</strong></td><td>Fix&eacute;</td></tr>
+        <tr><td><strong>Multi-step</strong></td><td>40%</td><td><strong>100%</strong></td><td>+60pp</td></tr>
+        <tr><td><strong>Adversarial</strong></td><td>17%</td><td><strong>83%</strong></td><td>+66pp</td></tr>
+        <tr><td><strong>Latence</strong></td><td>3.5s</td><td><strong>2.1s</strong></td><td>-40%</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Le bug critique&nbsp;:</strong> on demande &laquo;&nbsp;Score de satisfaction client ?&nbsp;&raquo; sur un fichier qui n'a pas de colonne satisfaction. Au lieu de refuser, l'AI a <strong>invent&eacute;</strong> que le profit pouvait servir d'approximation pour la satisfaction. C'est une hallucination &mdash; une r&eacute;ponse qui a l'air correcte mais qui est fabriqu&eacute;e.</p>
+
+    <p><strong>Les 2 corrections&nbsp;:</strong></p>
+    <table>
+      <thead><tr><th>#</th><th>Correction</th><th>Impact</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td>R&egrave;gle anti-hallucination dans les instructions de l'AI&nbsp;: &laquo;&nbsp;Si la donn&eacute;e n'existe pas, dis-le. N'invente jamais de substitut.&nbsp;&raquo;</td>
+          <td>L'hallucination disparait. 0/20 donn&eacute;es invent&eacute;es.</td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td>Passage au mod&egrave;le plus puissant&nbsp;: GPT-4o-mini &rarr; GPT-4o</td>
+          <td>Questions complexes (tri + regroupement + classement)&nbsp;: 40% &rarr; 100%. Le mod&egrave;le plus puissant &eacute;crit des calculs corrects m&ecirc;me pour les questions en plusieurs &eacute;tapes.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="key-insight">
+      <p><strong>Insight cl&eacute;&nbsp;:</strong> les tests faits pendant le d&eacute;veloppement (22/22 r&eacute;ussis) ne garantissent <strong>pas</strong> la qualit&eacute; sur de nouvelles questions. L'&eacute;valuation avec des questions que le syst&egrave;me n'a jamais vues est indispensable &mdash; c'est l&agrave; qu'on d&eacute;couvre les vrais probl&egrave;mes. <strong>&laquo;&nbsp;En AI, livrer c'est facile. &Eacute;valuer, c'est dur.&nbsp;&raquo;</strong></p>
+    </div>
+  </div>
+
+  <!-- 8. L'ÉVALUATION — EVAL GATE -->
+  <div class="section">
+    <div class="section-number">8</div>
+    <h2>L'&eacute;valuation &mdash; Eval Gate</h2>
+
+    <p>L'Eval Gate &eacute;value le produit sur <strong>6 crit&egrave;res</strong>, organis&eacute;s en entonnoir &mdash; du plus critique au moins critique. On v&eacute;rifie d'abord que l'outil ne ment pas, puis qu'il calcule juste, puis qu'il r&eacute;pond correctement dans l'ensemble.</p>
+
+    <table>
+      <thead><tr><th>Couche</th><th>Crit&egrave;res</th><th>Question</th><th>Niveau</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Confiance</strong></td>
+          <td>G1 + G2</td>
+          <td>Est-ce que l'outil invente des donn&eacute;es&nbsp;? Est-ce que les calculs simples sont justes&nbsp;?</td>
+          <td><span class="severity-tag blocking">BLOCKING</span></td>
+        </tr>
+        <tr>
+          <td><strong>2. Qualit&eacute;</strong></td>
+          <td>G3 + G4</td>
+          <td>Est-ce que la pr&eacute;cision globale est suffisante&nbsp;? Les graphiques sont-ils corrects&nbsp;?</td>
+          <td><span class="severity-tag quality">QUALITY</span></td>
+        </tr>
+        <tr>
+          <td><strong>3. Performance</strong></td>
+          <td>G5</td>
+          <td>Est-ce que &ccedil;a r&eacute;pond assez vite&nbsp;?</td>
+          <td><span class="severity-tag signal">SIGNAL</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size: 16px; margin: 24px 0 14px; color: var(--text);">Pourquoi ces niveaux et ces seuils</h3>
+
+    <table>
+      <thead><tr><th>Crit&egrave;re</th><th>Niveau</th><th>Seuil</th><th>Justification</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>G1</strong> &mdash; Z&eacute;ro hallucination</td>
+          <td><span class="severity-tag blocking">BLOCKING</span></td>
+          <td>0 donn&eacute;e invent&eacute;e sur 20 questions</td>
+          <td>Un outil d'analyse qui invente des chiffres est <strong>pire qu'inutile</strong> &mdash; il donne une fausse confiance. Si l'AI ne sait pas, elle doit le dire. Non-n&eacute;gociable.</td>
+        </tr>
+        <tr>
+          <td><strong>G2</strong> &mdash; Calculs simples exacts</td>
+          <td><span class="severity-tag blocking">BLOCKING</span></td>
+          <td>100% sur les 4 questions de calcul simple (sommes, moyennes, %)</td>
+          <td>Ce sont les questions les plus basiques (&laquo;&nbsp;quel est le total des ventes ?&nbsp;&raquo;). Si l'outil se trompe l&agrave;-dessus, c'est un probl&egrave;me fondamental &mdash; autant utiliser Excel.</td>
+        </tr>
+        <tr>
+          <td><strong>G3</strong> &mdash; Pr&eacute;cision globale</td>
+          <td><span class="severity-tag quality">QUALITY</span></td>
+          <td>&ge; 90% (18/20 questions)</td>
+          <td>Inclut les questions complexes (classements, comparaisons multi-&eacute;tapes, questions pi&egrave;ges). Le seuil &agrave; 90% laisse une marge de 2 erreurs sur 20. En dessous, le produit n'est pas assez fiable pour &ecirc;tre montr&eacute;.</td>
+        </tr>
+        <tr>
+          <td><strong>G4</strong> &mdash; Graphiques corrects</td>
+          <td><span class="severity-tag quality">QUALITY</span></td>
+          <td>100% des graphiques g&eacute;n&eacute;r&eacute;s correspondent aux donn&eacute;es</td>
+          <td>Un graphique faux est plus dangereux qu'un chiffre faux &mdash; on le lit en 1 seconde sans v&eacute;rifier. Les graphiques g&eacute;n&eacute;r&eacute;s doivent &ecirc;tre irr&eacute;prochables, m&ecirc;me si le taux de g&eacute;n&eacute;ration est faible.</td>
+        </tr>
+        <tr>
+          <td><strong>G5</strong> &mdash; Latence</td>
+          <td><span class="severity-tag signal">SIGNAL</span></td>
+          <td>&lt; 15s m&eacute;diane</td>
+          <td>Produit d&eacute;mo sur Render &agrave; $7/mois, pas un SaaS en production. Le seuil est g&eacute;n&eacute;reux volontairement. En production, ce serait QUALITY avec un seuil &agrave; &lt; 5s.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <div class="callout-title">R&egrave;gles de d&eacute;cision</div>
+      <p><strong>GO</strong> = 0 BLOCKING fail + 0 QUALITY fail &rarr; on met en ligne.<br>
+      <strong>CONDITIONAL GO</strong> = 0 BLOCKING fail + &ge;1 QUALITY/SIGNAL fail &rarr; on met en ligne avec conditions document&eacute;es.<br>
+      <strong>NO-GO</strong> = &ge;1 BLOCKING fail &rarr; retour obligatoire au d&eacute;veloppement (micro-loop).</p>
+    </div>
+
+    <h3 style="font-size: 16px; margin: 24px 0 14px; color: var(--text);">M&eacute;thodologie</h3>
+
+    <p>L'&eacute;valuation est faite sur un <strong>jeu de 20 questions nouvelles</strong> (aucune r&eacute;utilis&eacute;e du d&eacute;veloppement), structur&eacute;es par type&nbsp;: calcul simple (4), tendance (3), comparaison (4), multi-&eacute;tapes (5), questions pi&egrave;ges (3), consistance (1). Chaque r&eacute;ponse est not&eacute;e&nbsp;: <strong>1.0</strong> = correct, <strong>0.5</strong> = partiellement correct, <strong>0.0</strong> = incorrect, <strong>-0.5</strong> = hallucination. La moyenne donne le score final.</p>
+
+    <h3 style="font-size: 16px; margin: 24px 0 14px; color: var(--text);">R&eacute;sultats</h3>
+
+    <div class="metrics-grid">
+      <div class="metric-card blocking">
+        <div class="metric-badge">BLOCKING</div>
+        <div class="metric-value">0/20</div>
+        <div class="metric-label">G1 &mdash; Hallucinations</div>
+        <div class="metric-desc">Cible 0 &mdash; pass&eacute;. Z&eacute;ro donn&eacute;e invent&eacute;e. L'AI refuse correctement quand la donn&eacute;e n'existe pas.</div>
+      </div>
+      <div class="metric-card blocking">
+        <div class="metric-badge">BLOCKING</div>
+        <div class="metric-value">4/4</div>
+        <div class="metric-label">G2 &mdash; Calculs simples</div>
+        <div class="metric-desc">Cible 100% &mdash; pass&eacute;. Sommes, moyennes, pourcentages &mdash; toujours corrects.</div>
+      </div>
+      <div class="metric-card quality">
+        <div class="metric-badge">QUALITY</div>
+        <div class="metric-value">87.5%</div>
+        <div class="metric-label">G3 &mdash; Pr&eacute;cision globale</div>
+        <div class="metric-desc">Cible &ge; 90% &mdash; <strong>&eacute;chou&eacute;</strong>. 17.5/20. Les &eacute;carts = 2 erreurs de calcul complexe + 1 format + 1 refus implicite.</div>
+      </div>
+      <div class="metric-card quality">
+        <div class="metric-badge">QUALITY</div>
+        <div class="metric-value">2/2</div>
+        <div class="metric-label">G4 &mdash; Graphiques corrects</div>
+        <div class="metric-desc">Cible 100% &mdash; pass&eacute;. Les graphiques g&eacute;n&eacute;r&eacute;s correspondent aux donn&eacute;es. Taux de g&eacute;n&eacute;ration&nbsp;: 25% (am&eacute;liorable).</div>
+      </div>
+      <div class="metric-card signal">
+        <div class="metric-badge">SIGNAL</div>
+        <div class="metric-value">2.1s</div>
+        <div class="metric-label">G5 &mdash; Latence m&eacute;diane</div>
+        <div class="metric-desc">Cible &lt; 15s &mdash; pass&eacute;. 7x sous le seuil. Max 3.5s.</div>
+      </div>
+    </div>
+
+    <h3 style="font-size: 16px; margin: 24px 0 14px; color: var(--text);">4 conditions document&eacute;es</h3>
+
+    <table>
+      <thead><tr><th>#</th><th>Condition</th><th>D&eacute;tail</th><th>Impact</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td>Calcul de marge</td>
+          <td>&laquo;&nbsp;Quelle cat&eacute;gorie a la pire marge de profit ?&nbsp;&raquo; &mdash; l'AI calcule la moyenne des marges par ligne (3.88%) au lieu du profit total / ventes totales (2.5%). Deux m&eacute;thodes possibles, l'AI choisit la mauvaise pour ce contexte.</td>
+          <td>Accept&eacute;. Fixable par une r&egrave;gle dans les instructions&nbsp;: &laquo;&nbsp;marge = total profit / total ventes&nbsp;&raquo;.</td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td>Co&ucirc;t par conversion</td>
+          <td>&laquo;&nbsp;Quel canal a le co&ucirc;t par conversion le plus bas ?&nbsp;&raquo; &mdash; l'AI confond deux colonnes (co&ucirc;t par clic vs co&ucirc;t par conversion), donne 0.50$ au lieu de 2.02$.</td>
+          <td>Accept&eacute;. Fixable en enrichissant la description des colonnes dans le sommaire du fichier.</td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td>Taux de g&eacute;n&eacute;ration de graphiques</td>
+          <td>Seulement 2 graphiques g&eacute;n&eacute;r&eacute;s sur 8 questions qui le m&eacute;ritaient (25%). Les graphiques produits sont corrects, mais l'AI ne les produit pas assez souvent.</td>
+          <td>Accept&eacute;. Fixable par une r&egrave;gle de g&eacute;n&eacute;ration plus agressive dans les instructions.</td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td>Refus implicite sur les dates</td>
+          <td>&laquo;&nbsp;D&eacute;penses marketing en 2023 ?&nbsp;&raquo; &mdash; l'AI retourne &laquo;&nbsp;0.00$&nbsp;&raquo; au lieu de dire clairement &laquo;&nbsp;pas de donn&eacute;es pour 2023&nbsp;&raquo;. Pas faux, mais trompeur.</td>
+          <td>Accept&eacute;. Fixable par une r&egrave;gle&nbsp;: &laquo;&nbsp;si les dates demand&eacute;es ne sont pas dans le fichier, dis-le&nbsp;&raquo;.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="key-insight">
+      <p><strong>D&eacute;cision&nbsp;:</strong> CONDITIONAL GO &rarr; mise en ligne. 0 BLOCKING fail, 1 QUALITY fail (G3&nbsp;: 87.5% < 90% &mdash; &eacute;cart d'1 question). Les 4 conditions sont des optimisations d'instructions, pas des bugs critiques. Le produit est fiable &agrave; 87.5% sans aucune hallucination.</p>
+    </div>
+  </div>
+
+  <!-- 9. LE PITCH -->
+  <div class="section">
+    <div class="section-number">9</div>
+    <h2>Le pitch interview &mdash; 45 secondes</h2>
+
+    <div class="pitch-box">
+      <p>&laquo;&nbsp;J'ai construit DataPilot, un <strong>agent AI qui analyse des donn&eacute;es CSV</strong> en langage naturel.</p>
+      <p>Le probl&egrave;me&nbsp;: les &eacute;quipes business passent 30 &agrave; 60 minutes dans Excel pour r&eacute;pondre &agrave; une seule question sur leurs donn&eacute;es. ChatGPT peut aider mais c'est un outil g&eacute;n&eacute;raliste &mdash; pas con&ccedil;u pour l'analyse de donn&eacute;es.</p>
+      <p>DataPilot fonctionne en <strong>cha&icirc;nage d'&eacute;tapes</strong> avec un seul appel &agrave; l'AI. Tu poses ta question, l'AI <strong>&eacute;crit les instructions de calcul</strong>, les ex&eacute;cute dans un espace isol&eacute;, et retourne la r&eacute;ponse avec un graphique &mdash; en <strong>2 secondes</strong>.</p>
+      <p>L'insight cl&eacute;&nbsp;: mon premier eval a score <strong>55%</strong> avec une hallucination. Le mod&egrave;le avait invent&eacute; que le profit pouvait servir de proxy pour la satisfaction client. J'ai ajout&eacute; une <strong>r&egrave;gle anti-hallucination</strong> dans le prompt et upgrad&eacute; le mod&egrave;le. Deuxi&egrave;me round&nbsp;: <strong>87.5%</strong>, z&eacute;ro hallucination.</p>
+      <p>La le&ccedil;on&nbsp;: les tests en d&eacute;veloppement (22/22 PASS) ne garantissent pas la qualit&eacute; sur de nouvelles questions. <strong>In AI, shipping is easy. Evaluating is hard.</strong>&nbsp;&raquo;</p>
+    </div>
+  </div>
+
+  <!-- 10. CONCEPTS -->
+  <div class="section section-page-break">
+    <div class="section-number">10</div>
+    <h2>Concepts &mdash; si on te demande</h2>
+
+    <table class="concepts-table">
+      <thead><tr><th>Concept</th><th>C'est quoi</th><th>Exemple concret</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Cha&icirc;nage d'&eacute;tapes (Prompt Chaining)</td>
+          <td>Architecture d'agent AI o&ugrave; les &eacute;tapes sont fix&eacute;es par le d&eacute;veloppeur. Chaque &eacute;tape re&ccedil;oit le r&eacute;sultat de la pr&eacute;c&eacute;dente. L'AI intervient &agrave; une ou plusieurs &eacute;tapes pr&eacute;cises, mais c'est le code qui orchestre le flux. Pr&eacute;visible, d&eacute;buggable, co&ucirc;t fixe.</td>
+          <td>DataPilot&nbsp;: schema &rarr; codegen &rarr; sandbox &rarr; answer. 1 appel AI, 4 &eacute;tapes, 2 secondes.</td>
+        </tr>
+        <tr>
+          <td>Agent autonome (ReAct)</td>
+          <td>Architecture d'agent AI o&ugrave; l'AI d&eacute;cide elle-m&ecirc;me du chemin. ReAct = Reason + Act. L'AI boucle&nbsp;: r&eacute;fl&eacute;chir &rarr; choisir un outil &rarr; observer le r&eacute;sultat &rarr; recommencer. Le nombre de tours est variable. Flexible mais impr&eacute;visible, co&ucirc;teux, dur &agrave; d&eacute;bugger.</td>
+          <td>LeakFinder (NO-GO)&nbsp;: agent ReAct 9 &eacute;tapes, latence 2s &agrave; 22 min. L'impr&eacute;visibilit&eacute; a tu&eacute; le projet.</td>
+        </tr>
+        <tr>
+          <td>G&eacute;n&eacute;ration de code</td>
+          <td>Au lieu de demander &agrave; l'AI de r&eacute;pondre directement, on lui demande d'&eacute;crire la formule de calcul. Cette formule est ensuite ex&eacute;cut&eacute;e sur les vraies donn&eacute;es. Les chiffres viennent d'un calcul r&eacute;el, pas de la m&eacute;moire de l'AI.</td>
+          <td>&laquo;&nbsp;Total des ventes ?&nbsp;&raquo; &rarr; l'AI &eacute;crit &laquo;&nbsp;fais la somme de la colonne Ventes&nbsp;&raquo; &rarr; le calcul retourne 2,297,200.86$</td>
+        </tr>
+        <tr>
+          <td>Sandbox</td>
+          <td>Espace isol&eacute; pour ex&eacute;cuter le code g&eacute;n&eacute;r&eacute; par l'AI. Comme une salle d'examen&nbsp;: le calcul tourne seul, s&eacute;par&eacute; du reste. Si &ccedil;a plante, le serveur principal n'est pas touch&eacute;.</td>
+          <td>Le calcul tourne dans un processus s&eacute;par&eacute; avec un temps limite &mdash; s'il d&eacute;passe, il est coup&eacute;</td>
+        </tr>
+        <tr>
+          <td>Anti-hallucination</td>
+          <td>R&egrave;gle dans les instructions donn&eacute;es &agrave; l'AI qui la force &agrave; <strong>refuser</strong> plut&ocirc;t qu'inventer quand la donn&eacute;e n'existe pas. Les r&egrave;gles pr&eacute;cises et sp&eacute;cifiques marchent, les instructions vagues non.</td>
+          <td>&laquo;&nbsp;Score de satisfaction ?&nbsp;&raquo; &rarr; &laquo;&nbsp;Ce fichier ne contient pas de donn&eacute;e sur la satisfaction client&nbsp;&raquo;</td>
+        </tr>
+        <tr>
+          <td>Golden dataset</td>
+          <td>Jeu de 20 questions <strong>nouvelles</strong> (pas celles utilis&eacute;es pendant le d&eacute;veloppement) pour &eacute;valuer la qualit&eacute; r&eacute;elle. C'est comme un examen final avec des questions que l'&eacute;l&egrave;ve n'a jamais vues &mdash; pas juste les exercices du cours.</td>
+          <td>Les tests de dev (22/22) disaient &laquo;&nbsp;tout va bien&nbsp;&raquo;. L'eval sur nouvelles questions&nbsp;: 55%. Les vrais bugs apparaissent sur du terrain inconnu.</td>
+        </tr>
+        <tr>
+          <td>Eval Gate</td>
+          <td>Point de contr&ocirc;le qualit&eacute; de la Builder PM Method. 3 niveaux de s&eacute;v&eacute;rit&eacute; (BLOCKING = on ne shippe pas / QUALITY = seuil configurable / SIGNAL = on mesure). 3 d&eacute;cisions possibles (GO / CONDITIONAL GO / NO-GO). Si un crit&egrave;re BLOCKING &eacute;choue, retour obligatoire au d&eacute;veloppement.</td>
+          <td>Round 1&nbsp;: hallucination d&eacute;tect&eacute;e (BLOCKING) &rarr; NO-GO &rarr; corrections &rarr; Round 2&nbsp;: CONDITIONAL GO</td>
+        </tr>
+        <tr>
+          <td>Micro-loop</td>
+          <td>Boucle construire &harr; &eacute;valuer. On corrige les probl&egrave;mes trouv&eacute;s, puis on re-teste. On boucle jusqu'&agrave; ce que la qualit&eacute; passe le seuil.</td>
+          <td>55% &rarr; r&egrave;gle anti-hallucination + mod&egrave;le plus puissant &rarr; 87.5%</td>
+        </tr>
+        <tr>
+          <td>Sommaire du fichier (schema)</td>
+          <td>R&eacute;sum&eacute; de la structure du fichier de donn&eacute;es&nbsp;: noms des colonnes, types (nombre, texte, date...) et quelques exemples. C'est ce que l'AI &laquo;&nbsp;voit&nbsp;&raquo; &mdash; elle ne voit jamais les donn&eacute;es compl&egrave;tes.</td>
+          <td>&laquo;&nbsp;Colonne Ventes (nombres), exemples : 245.5, 731.2, 14.6&nbsp;&raquo;</td>
+        </tr>
+        <tr>
+          <td>M&eacute;ta-question</td>
+          <td>Question sur la m&eacute;thode (&laquo;&nbsp;comment tu as calcul&eacute; &ccedil;a ?&nbsp;&raquo;), pas sur les donn&eacute;es. D&eacute;tect&eacute;e par le code (recherche de mots-cl&eacute;s) pour &eacute;viter de toucher aux instructions principales de l'AI.</td>
+          <td>&laquo;&nbsp;Comment tu as fait ?&nbsp;&raquo; &rarr; d&eacute;tection automatique &rarr; explication de la m&eacute;thode (sans relancer le calcul)</td>
+        </tr>
+        <tr>
+          <td>FastAPI</td>
+          <td>Outil pour cr&eacute;er des serveurs web. Tu d&eacute;finis des &laquo;&nbsp;portes d'entr&eacute;e&nbsp;&raquo; (routes) que l'interface peut appeler, et FastAPI g&egrave;re le reste (validation, erreurs, documentation).</td>
+          <td>DataPilot a une seule porte d'entr&eacute;e&nbsp;: &laquo;&nbsp;analyse cette question sur ce fichier&nbsp;&raquo;</td>
+        </tr>
+        <tr>
+          <td>Render</td>
+          <td>Plateforme cloud. Tu push du code sur GitHub, Render le d&eacute;tecte, l'installe et le met en ligne automatiquement.</td>
+          <td>Push sur <code>main</code> &rarr; backend live en 2 minutes</td>
+        </tr>
+        <tr>
+          <td>Lovable</td>
+          <td>Outil no-code qui g&eacute;n&egrave;re du React + Tailwind via des prompts en langage naturel.</td>
+          <td>&laquo;&nbsp;Ajoute un dataset selector avec 3 d&eacute;mos&nbsp;&raquo; &rarr; code React g&eacute;n&eacute;r&eacute;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 11. QUESTIONS TEST -->
+  <div class="section">
+    <div class="section-number">11</div>
+    <h2>Questions test &mdash; r&eacute;pondre sans regarder</h2>
+
+    <ol class="questions-list">
+      <li>Quel probl&egrave;me DataPilot r&eacute;sout qu'Excel et ChatGPT ne r&eacute;solvent pas&nbsp;?</li>
+      <li>C'est quoi le cha&icirc;nage d'&eacute;tapes&nbsp;? Pourquoi c'est mieux qu'un agent autonome pour ce cas&nbsp;?</li>
+      <li>Pourquoi un seul appel &agrave; l'AI par question&nbsp;? Pourquoi pas deux&nbsp;?</li>
+      <li>Explique le pipeline en 4 &eacute;tapes &agrave; quelqu'un qui ne conna&icirc;t pas l'AI</li>
+      <li>Pourquoi l'AI ne voit jamais les donn&eacute;es compl&egrave;tes&nbsp;? Quel est l'avantage&nbsp;?</li>
+      <li>C'est quoi une hallucination dans le contexte de DataPilot&nbsp;? Donne l'exemple E15.</li>
+      <li>Comment la r&egrave;gle anti-hallucination fonctionne&nbsp;? Pourquoi les instructions vagues ne marchent pas&nbsp;?</li>
+      <li>Raconte l'histoire du NO-GO en 30 secondes. 55% &rarr; 87.5%, comment&nbsp;?</li>
+      <li>Pourquoi les 22/22 micro-tests du BUILD n'ont pas pr&eacute;dit le 55% de l'eval&nbsp;?</li>
+      <li>C'est quoi &laquo;&nbsp;code d&eacute;terministe &gt; prompt probabiliste&nbsp;&raquo;&nbsp;? Donne l'exemple des m&eacute;ta-questions.</li>
+      <li>Dessine le sch&eacute;ma d'architecture&nbsp;: quels modules, quel appel API&nbsp;?</li>
+      <li>Qu'est-ce que l'Eval Gate&nbsp;? Les 3 niveaux, les 3 d&eacute;cisions&nbsp;?</li>
+      <li>Pourquoi GPT-4o et pas GPT-4o-mini&nbsp;? Donne les chiffres.</li>
+      <li>C'est quoi un sandbox&nbsp;? Pourquoi c'est important pour la s&eacute;curit&eacute;&nbsp;?</li>
+      <li>&laquo;&nbsp;In AI, shipping is easy. Evaluating is hard.&nbsp;&raquo; Explique avec les donn&eacute;es de DataPilot.</li>
+    </ol>
+  </div>
+
+  <!-- 12. RÉPONSES AUX QUESTIONS TEST -->
+  <div class="section section-page-break">
+    <div class="section-number">12</div>
+    <h2>R&eacute;ponses aux questions test</h2>
+    <p style="color: var(--text-muted); margin-bottom: 20px;">R&eacute;f&eacute;rence &mdash; &agrave; lire <em>apr&egrave;s</em> avoir tent&eacute; de r&eacute;pondre seul (Section 11).</p>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">1. Quel probl&egrave;me DataPilot r&eacute;sout qu'Excel et ChatGPT ne r&eacute;solvent pas&nbsp;?</div>
+      <p><strong>Excel</strong>&nbsp;: tu dois savoir ce que tu cherches ET savoir le formuler (VLOOKUP, tableaux crois&eacute;s). 30 &agrave; 60 minutes pour UNE question. Pas d'insights automatiques &mdash; tu ne trouves que ce que tu cherches.</p>
+      <p><strong>ChatGPT</strong>&nbsp;: c'est un couteau suisse (texte, image, code, donn&eacute;es). Il n'est pas optimis&eacute; pour l'analyse de donn&eacute;es&nbsp;: session qui expire, fichiers qui disparaissent, pas d'insights proactifs, pas de graphiques adapt&eacute;s automatiquement.</p>
+      <p><strong>DataPilot</strong>&nbsp;: outil d&eacute;di&eacute; &agrave; l'analyse. Tu poses ta question, tu re&ccedil;ois la r&eacute;ponse avec un graphique en 2 secondes. Et il te signale des anomalies que tu n'as pas demand&eacute;es.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">2. C'est quoi le cha&icirc;nage d'&eacute;tapes vs l'agent autonome&nbsp;? Pourquoi ce choix&nbsp;?</div>
+      <p><strong>Le cha&icirc;nage (Prompt Chaining)&nbsp;:</strong> le d&eacute;veloppeur d&eacute;finit des &eacute;tapes dans le code, dans un ordre fixe. L'AI intervient &agrave; un point pr&eacute;cis, mais c'est le code qui orchestre le flux. R&eacute;sultat&nbsp;: pr&eacute;visible, d&eacute;buggable, co&ucirc;t fixe.</p>
+      <p><strong>L'agent autonome (ReAct = Reason + Act)&nbsp;:</strong> l'AI re&ccedil;oit des outils et d&eacute;cide toute seule quoi faire. Elle boucle&nbsp;: r&eacute;fl&eacute;chir &rarr; choisir un outil &rarr; observer &rarr; recommencer, jusqu'&agrave; ce qu'elle ait la r&eacute;ponse. Le nombre de tours est variable (3 &agrave; 15+). R&eacute;sultat&nbsp;: flexible mais impr&eacute;visible, co&ucirc;teux, dur &agrave; d&eacute;bugger.</p>
+      <p><strong>Pourquoi le cha&icirc;nage pour DataPilot&nbsp;:</strong> l'analyse de donn&eacute;es suit toujours le m&ecirc;me chemin (comprendre le fichier &rarr; &eacute;crire le calcul &rarr; ex&eacute;cuter &rarr; r&eacute;pondre). Le chemin est connu, la t&acirc;che est r&eacute;p&eacute;titive. Laisser l'AI d&eacute;cider = complexit&eacute; et impr&eacute;visibilit&eacute; pour z&eacute;ro gain.</p>
+      <p><strong>Preuve par le n&eacute;gatif&nbsp;:</strong> LeakFinder, un autre side project, utilisait un agent ReAct en 9 &eacute;tapes pour auditer des sites web. Latence&nbsp;: 2s &agrave; 22 minutes. L'impr&eacute;visibilit&eacute; a tu&eacute; le projet (NO-GO).</p>
+      <p><strong>R&egrave;gle de d&eacute;cision&nbsp;:</strong> si tu peux dessiner le chemin &agrave; l'avance &rarr; cha&icirc;nage. Si chaque question peut n&eacute;cessiter un chemin diff&eacute;rent &rarr; agent autonome.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">3. Pourquoi un seul appel &agrave; l'AI par question&nbsp;?</div>
+      <p>Le design initial pr&eacute;voyait <strong>2 appels</strong>&nbsp;: (1) l'AI &eacute;crit les instructions de calcul, (2) une deuxi&egrave;me AI r&eacute;sume le r&eacute;sultat en langage naturel.</p>
+      <p><strong>Le probl&egrave;me&nbsp;:</strong> le 2&egrave;me appel ajoutait ~3 secondes sans apporter de valeur. La solution&nbsp;: on demande &agrave; l'AI d'inclure directement la r&eacute;ponse format&eacute;e dans les instructions de calcul. Le calcul produit &agrave; la fois le chiffre ET la phrase de r&eacute;ponse.</p>
+      <p><strong>R&eacute;sultat&nbsp;:</strong> m&ecirc;me qualit&eacute;, moiti&eacute; du temps, moiti&eacute; du co&ucirc;t.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">4. Le pipeline en 4 &eacute;tapes</div>
+      <p><strong>&Eacute;tape 1 &mdash; SCHEMA</strong>&nbsp;: le fichier de donn&eacute;es est lu, et on en extrait un sommaire (noms des colonnes, types, quelques exemples). C'est ce sommaire qui sera envoy&eacute; &agrave; l'AI &mdash; pas les donn&eacute;es compl&egrave;tes.</p>
+      <p><strong>&Eacute;tape 2 &mdash; CODEGEN</strong>&nbsp;: le sommaire + la question de l'utilisateur sont envoy&eacute;s &agrave; GPT-4o. L'AI &eacute;crit les instructions de calcul (du code) qui r&eacute;pondent &agrave; la question.</p>
+      <p><strong>&Eacute;tape 3 &mdash; SANDBOX</strong>&nbsp;: les instructions sont ex&eacute;cut&eacute;es dans un espace isol&eacute; avec les vraies donn&eacute;es. Si le calcul plante, on renvoie l'erreur &agrave; l'AI pour qu'elle corrige (max 2 tentatives).</p>
+      <p><strong>&Eacute;tape 4 &mdash; ANSWER</strong>&nbsp;: le r&eacute;sultat du calcul (texte + graphique si pertinent) est assembl&eacute; et renvoy&eacute; &agrave; l'utilisateur, avec optionnellement des insights proactifs.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">5. Pourquoi l'AI ne voit jamais les donn&eacute;es compl&egrave;tes&nbsp;?</div>
+      <p>L'AI ne re&ccedil;oit que le <strong>sommaire du fichier</strong> (colonnes, types, quelques exemples) &mdash; jamais les milliers de lignes de donn&eacute;es.</p>
+      <p><strong>Avantage 1&nbsp;:</strong> les chiffres ne peuvent pas &ecirc;tre invent&eacute;s. L'AI &eacute;crit la formule de calcul, mais ce sont les vraies donn&eacute;es qui produisent le chiffre. Si l'AI se trompe dans la formule, le r&eacute;sultat sera faux &mdash; mais il ne sera pas invent&eacute;.</p>
+      <p><strong>Avantage 2&nbsp;:</strong> rapidit&eacute; et co&ucirc;t. Envoyer un sommaire de 20 lignes &agrave; l'AI co&ucirc;te moins cher et va plus vite qu'envoyer 10&nbsp;000 lignes de donn&eacute;es.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">6. C'est quoi une hallucination&nbsp;? L'exemple E15.</div>
+      <p>Une <strong>hallucination</strong> = quand l'AI g&eacute;n&egrave;re une r&eacute;ponse qui a l'air correcte mais qui est <strong>fabriqu&eacute;e</strong>. Elle n'a pas fait d'erreur de calcul &mdash; elle a invent&eacute; une donn&eacute;e qui n'existe pas.</p>
+      <p><strong>Exemple E15&nbsp;:</strong> on demande &laquo;&nbsp;Score de satisfaction client ?&nbsp;&raquo; sur un fichier qui n'a pas de colonne satisfaction. Au lieu de refuser, l'AI a d&eacute;cid&eacute; que le profit pouvait servir d'approximation pour la satisfaction. C'est une r&eacute;ponse structur&eacute;e, argument&eacute;e &mdash; et compl&egrave;tement invent&eacute;e.</p>
+      <p><strong>Pourquoi c'est grave&nbsp;:</strong> l'utilisateur fait confiance au chiffre. Il ne sait pas que l'AI a invent&eacute; le lien profit&rarr;satisfaction. C'est pour &ccedil;a que c'est class&eacute; BLOCKING &mdash; un outil d'analyse qui invente des donn&eacute;es est pire qu'inutile.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">7. Comment la r&egrave;gle anti-hallucination fonctionne&nbsp;?</div>
+      <p>On ajoute dans les instructions de l'AI une r&egrave;gle <strong>pr&eacute;cise et sp&eacute;cifique</strong>&nbsp;: &laquo;&nbsp;Si la donn&eacute;e demand&eacute;e n'existe pas dans le fichier, dis-le clairement. N'invente jamais de substitut.&nbsp;&raquo;</p>
+      <p><strong>Pourquoi les instructions vagues ne marchent pas&nbsp;:</strong> &laquo;&nbsp;sois honnête&nbsp;&raquo; ou &laquo;&nbsp;ne mens pas&nbsp;&raquo; ne fonctionne pas &mdash; l'AI ne croit pas mentir quand elle invente un proxy. Elle essaie d'aider. Il faut une r&egrave;gle sp&eacute;cifique qui couvre le cas exact&nbsp;: donn&eacute;e absente &rarr; refus, pas approximation.</p>
+      <p><strong>R&eacute;sultat&nbsp;:</strong> apr&egrave;s la r&egrave;gle, 0/20 hallucinations. L'AI refuse correctement chaque fois que la donn&eacute;e n'existe pas.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">8. L'histoire du NO-GO en 30 secondes</div>
+      <p><strong>Round 1</strong> (mod&egrave;le l&eacute;ger, GPT-4o-mini)&nbsp;: 55% de pr&eacute;cision, 1 hallucination. D&eacute;cision&nbsp;: <strong>NO-GO</strong> &mdash; retour au d&eacute;veloppement.</p>
+      <p><strong>2 corrections&nbsp;:</strong> (1) r&egrave;gle anti-hallucination dans les instructions, (2) passage au mod&egrave;le plus puissant (GPT-4o).</p>
+      <p><strong>Round 2&nbsp;:</strong> 87.5%, z&eacute;ro hallucination, latence en baisse (-40%). D&eacute;cision&nbsp;: <strong>CONDITIONAL GO</strong> &mdash; on met en ligne avec 4 conditions document&eacute;es.</p>
+      <p><strong>Le delta&nbsp;:</strong> +32.5 points de pourcentage. Les questions complexes (multi-&eacute;tapes)&nbsp;: 40% &rarr; 100%. Les questions pi&egrave;ges&nbsp;: 17% &rarr; 83%.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">9. Pourquoi les 22/22 tests du d&eacute;veloppement n'ont pas pr&eacute;dit le 55%&nbsp;?</div>
+      <p>Les tests du d&eacute;veloppement v&eacute;rifient que le <strong>code fonctionne</strong>&nbsp;: est-ce que le pipeline tourne&nbsp;? Est-ce que les modules se connectent&nbsp;? Est-ce que le r&eacute;sultat a le bon format&nbsp;?</p>
+      <p>L'&eacute;valuation v&eacute;rifie que le <strong>produit r&eacute;pond bien</strong> sur des questions <strong>nouvelles</strong> &mdash; des questions que le syst&egrave;me n'a jamais vues pendant le d&eacute;veloppement.</p>
+      <p>C'est la diff&eacute;rence entre r&eacute;ussir les exercices du cours (22/22) et passer l'examen final (55%). Les vrais bugs &mdash; hallucination, erreurs sur questions complexes, refus manquants &mdash; n'apparaissent que sur du terrain inconnu.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">10. Code d&eacute;terministe > AI probabiliste&nbsp;? L'exemple des m&eacute;ta-questions.</div>
+      <p><strong>Le probl&egrave;me&nbsp;:</strong> quand l'utilisateur demande &laquo;&nbsp;comment tu as calcul&eacute; &ccedil;a ?&nbsp;&raquo;, c'est une question sur la m&eacute;thode, pas sur les donn&eacute;es. Il ne faut pas relancer un calcul.</p>
+      <p><strong>Option 1 &mdash; demander &agrave; l'AI de d&eacute;tecter&nbsp;:</strong> on ajoute dans les instructions &laquo;&nbsp;si c'est une question sur la m&eacute;thode, explique au lieu de calculer&nbsp;&raquo;. R&eacute;sultat&nbsp;: ~70% de fiabilit&eacute;. L'AI ignore l'instruction 1 fois sur 3, et &ccedil;a cr&eacute;e des effets de bord sur les autres questions.</p>
+      <p><strong>Option 2 &mdash; le code d&eacute;tecte&nbsp;:</strong> avant d'envoyer la question &agrave; l'AI, le code v&eacute;rifie si elle contient des mots comme &laquo;&nbsp;comment&nbsp;&raquo;, &laquo;&nbsp;pourquoi&nbsp;&raquo;, &laquo;&nbsp;explain&nbsp;&raquo;. Si oui &rarr; redirection vers un chemin d&eacute;di&eacute;. C'est binaire (oui ou non), ~100% fiable, z&eacute;ro impact sur le reste.</p>
+      <p><strong>Principe&nbsp;:</strong> quand une d&eacute;cision est oui/non, le code classique bat l'AI. Quand une d&eacute;cision demande de la compr&eacute;hension, l'AI bat le code.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">11. Le sch&eacute;ma d'architecture</div>
+      <p><strong>Interface</strong> (Lovable / React + Tailwind) &rarr; envoie la question + le fichier via HTTPS &rarr; <strong>Serveur</strong> (FastAPI sur Render) qui orchestre 4 modules dans l'ordre&nbsp;:</p>
+      <p>1. <strong>schema.py</strong>&nbsp;: lit le fichier, extrait le sommaire (colonnes, types, exemples)</p>
+      <p>2. <strong>codegen.py</strong>&nbsp;: envoie le sommaire + la question &agrave; GPT-4o &rarr; re&ccedil;oit les instructions de calcul (seul appel AI)</p>
+      <p>3. <strong>sandbox.py</strong>&nbsp;: ex&eacute;cute les instructions dans un espace isol&eacute; &rarr; r&eacute;sultat + graphique</p>
+      <p>4. <strong>agent.py</strong>&nbsp;: assemble la r&eacute;ponse + insights proactifs &rarr; retourne le tout &agrave; l'interface en JSON</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">12. L'Eval Gate&nbsp;: 3 niveaux, 3 d&eacute;cisions</div>
+      <p><strong>3 niveaux de s&eacute;v&eacute;rit&eacute;&nbsp;:</strong></p>
+      <p>&bull; <strong>BLOCKING</strong> = si &ccedil;a &eacute;choue, on ne met pas en ligne. Non-n&eacute;gociable. Pour DataPilot&nbsp;: z&eacute;ro hallucination + calculs simples exacts.</p>
+      <p>&bull; <strong>QUALITY</strong> = seuil configurable. On &eacute;value si c'est acceptable. Pour DataPilot&nbsp;: pr&eacute;cision globale &ge; 90% + graphiques corrects.</p>
+      <p>&bull; <strong>SIGNAL</strong> = on mesure pour observer. Ne bloque pas. Pour DataPilot&nbsp;: latence &lt; 15s.</p>
+      <p><strong>3 d&eacute;cisions possibles&nbsp;:</strong></p>
+      <p>&bull; <strong>GO</strong> = 0 BLOCKING fail + 0 QUALITY fail &rarr; on met en ligne.</p>
+      <p>&bull; <strong>CONDITIONAL GO</strong> = 0 BLOCKING fail + &ge;1 QUALITY fail &rarr; on met en ligne avec conditions document&eacute;es.</p>
+      <p>&bull; <strong>NO-GO</strong> = &ge;1 BLOCKING fail &rarr; retour obligatoire au d&eacute;veloppement.</p>
+      <p><strong>DataPilot&nbsp;:</strong> Round 1 = NO-GO (1 hallucination BLOCKING). Round 2 = CONDITIONAL GO (0 BLOCKING, 1 QUALITY fail &agrave; 87.5% au lieu de 90%).</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">13. Pourquoi GPT-4o et pas GPT-4o-mini&nbsp;?</div>
+      <p>GPT-4o-mini a &eacute;t&eacute; test&eacute; en premier (moins cher, plus rapide). R&eacute;sultat&nbsp;: <strong>55%</strong> de pr&eacute;cision, 1 hallucination, et seulement 40% sur les questions complexes.</p>
+      <p>Apr&egrave;s passage &agrave; GPT-4o&nbsp;: <strong>87.5%</strong>, 0 hallucination, <strong>100%</strong> sur les questions complexes. Et paradoxalement <strong>plus rapide</strong> (2.1s vs 3.5s de m&eacute;diane) &mdash; le mod&egrave;le plus puissant &eacute;crit des calculs corrects du premier coup, sans avoir besoin de retenter.</p>
+      <p><strong>Trade-off&nbsp;:</strong> GPT-4o co&ucirc;te ~10x plus par requ&ecirc;te. Acceptable pour un produit d&eacute;mo. En production &agrave; grande &eacute;chelle, il faudrait optimiser les co&ucirc;ts. Mais ici, la qualit&eacute; est d&eacute;cisive &mdash; un outil d'analyse qui se trompe 1 fois sur 2 n'a pas de valeur.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">14. C'est quoi un sandbox&nbsp;? Pourquoi c'est important&nbsp;?</div>
+      <p>Un <strong>sandbox</strong> = un espace isol&eacute; o&ugrave; le code tourne seul, s&eacute;par&eacute; du reste du syst&egrave;me. Comme une salle d'examen&nbsp;: ce qui se passe dedans ne peut pas affecter l'ext&eacute;rieur.</p>
+      <p><strong>Pourquoi c'est critique&nbsp;:</strong> l'AI g&eacute;n&egrave;re du code &agrave; ex&eacute;cuter. Ce code pourrait planter, boucler infiniment, ou tenter des op&eacute;rations dangereuses. Le sandbox garantit que m&ecirc;me si le code g&eacute;n&eacute;r&eacute; fait n'importe quoi, le serveur principal n'est pas touch&eacute;.</p>
+      <p><strong>En pratique&nbsp;:</strong> le calcul tourne dans un processus s&eacute;par&eacute; avec un temps limite. S'il d&eacute;passe le temps ou plante, il est coup&eacute; proprement. Le serveur reste en ligne pour les autres utilisateurs.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <div class="callout-title">15. &laquo;&nbsp;En AI, livrer c'est facile. &Eacute;valuer, c'est dur.&nbsp;&raquo;</div>
+      <p><strong>Livrer&nbsp;:</strong> DataPilot a &eacute;t&eacute; d&eacute;velopp&eacute; en vertical slices (squelette &rarr; fonctionnalit&eacute;s). 22 tests de d&eacute;veloppement, tous r&eacute;ussis. Le pipeline fonctionne, le code est propre, le serveur tourne. Tout a l'air parfait.</p>
+      <p><strong>&Eacute;valuer&nbsp;:</strong> on pose 20 questions <strong>nouvelles</strong>. R&eacute;sultat&nbsp;: 55%. Le mod&egrave;le hallucine, se trompe sur les questions complexes, ne refuse pas quand il devrait. Les vrais probl&egrave;mes n'apparaissent que quand on teste avec des questions inconnues.</p>
+      <p><strong>La le&ccedil;on&nbsp;:</strong> en AI, le fait que le code fonctionne ne dit rien sur la qualit&eacute; des r&eacute;ponses. Un pipeline qui tourne &agrave; 100% peut produire des r&eacute;ponses fausses &agrave; 45%. L'&eacute;valuation sur des questions nouvelles est l'&eacute;tape la plus importante &mdash; et celle que la plupart des gens sautent.</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    DataPilot &middot; Product Mastery Card &middot; The Builder PM Method &middot; Mehdi Bargach 2026
+  </div>
+
+</div>
+
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme-datapilot', next);
+    updateToggle(next);
+  }
+  function updateToggle(t) {
+    document.getElementById('theme-icon').innerHTML = t === 'dark' ? '&#9788;' : '&#9790;';
+    document.getElementById('theme-label').textContent = t === 'dark' ? 'Light' : 'Dark';
+  }
+  const saved = localStorage.getItem('theme-datapilot') || 'dark';
+  if (saved !== 'dark') document.documentElement.setAttribute('data-theme', 'light');
+  updateToggle(saved);
+</script>
+
+</body>
+</html>
